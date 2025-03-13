@@ -1,11 +1,17 @@
-import { Cube2by2, Color } from "./cube_types";
+import {
+  Cube2by2,
+  Color,
+  Side,
+  MoveDirection,
+  CubeStickerIndex,
+} from "./cube_types";
 
 interface CubeInterface {
   cubeState: Cube2by2;
 }
 
 class Cube implements CubeInterface {
-  cubeState: Cube2by2;
+  public cubeState: Cube2by2;
   constructor() {
     this.cubeState = new Array(24);
     this.createInitialCube();
@@ -35,8 +41,100 @@ class Cube implements CubeInterface {
       this.cubeState[i] = color;
     }
   }
+
+  /**
+   * Turns a side of the cube, for example left side
+   * @param side
+   * @param direction 1 for clockwise moves, -1 for counterclockwise
+   * To do the L' move on the cube, side = "left", direction = -1
+   */
+  public turn(side: Side, direction: MoveDirection) {
+    switch (side) {
+      case "left":
+        this.moveStickers(0, 1, 2, 3, direction);
+        this.moveStickers(8, 12, 22, 4, direction);
+        this.moveStickers(11, 15, 21, 7, direction);
+        break;
+      case "back":
+        this.moveStickers(4, 5, 6, 7, direction);
+        this.moveStickers(1, 21, 17, 9, direction);
+        this.moveStickers(0, 20, 16, 8, direction);
+        break;
+      case "up":
+        this.moveStickers(8, 9, 10, 11, direction);
+        this.moveStickers(1, 6, 19, 12, direction);
+        this.moveStickers(2, 7, 16, 13, direction);
+        break;
+      case "front":
+        this.moveStickers(12, 13, 14, 15, direction);
+        this.moveStickers(3, 11, 19, 23, direction);
+        this.moveStickers(2, 10, 18, 22, direction);
+        break;
+      case "right":
+        this.moveStickers(16, 17, 18, 19, direction);
+        this.moveStickers(9, 5, 23, 13, direction);
+        this.moveStickers(10, 6, 20, 14, direction);
+        break;
+      case "down":
+        this.moveStickers(20, 21, 22, 23, direction);
+        this.moveStickers(5, 0, 15, 18, direction);
+        this.moveStickers(4, 3, 14, 17, direction);
+        break;
+      default:
+        throw new Error("unknown side " + side);
+    }
+  }
+
+  private moveStickers(
+    a: CubeStickerIndex,
+    b: CubeStickerIndex,
+    c: CubeStickerIndex,
+    d: CubeStickerIndex,
+    direction: MoveDirection
+  ) {
+    const temp = this.cubeState[a];
+    switch (direction) {
+      case -1: // counter-clockwise
+        this.cubeState[a] = this.cubeState[b];
+        this.cubeState[b] = this.cubeState[c];
+        this.cubeState[c] = this.cubeState[d];
+        this.cubeState[d] = temp;
+        break;
+      case 1: // clockwise
+        this.cubeState[a] = this.cubeState[d];
+        this.cubeState[d] = this.cubeState[c];
+        this.cubeState[c] = this.cubeState[b];
+        this.cubeState[b] = temp;
+        break;
+      default:
+        throw new Error("Unknown direction");
+    }
+  }
+
+  public visualizeCube() {
+    const cube = this.cubeState;
+    return `
+             +------+
+             | ${cube[8]}  ${cube[9]} |
+             | ${cube[11]}  ${cube[10]} |
+      +------+------+------+------+
+      | ${cube[1]}  ${cube[2]} | ${cube[12]}  ${cube[13]} | ${cube[19]}  ${cube[16]} | ${cube[6]}  ${cube[7]} |
+      | ${cube[0]}  ${cube[3]} | ${cube[15]}  ${cube[14]} | ${cube[18]}  ${cube[17]} | ${cube[5]}  ${cube[4]} |
+      +------+------+------+------+
+             | ${cube[22]}  ${cube[23]} |
+             | ${cube[21]}  ${cube[20]} |
+             +------+
+    `;
+  }
 }
 
 const cube = new Cube();
 
-console.log(cube.cubeState);
+// console.log(cube.cubeState);
+console.log(cube.visualizeCube());
+cube.turn("right", 1);
+cube.turn("up", 1);
+cube.turn("right", -1);
+cube.turn("up", -1);
+
+console.log(cube.visualizeCube());
