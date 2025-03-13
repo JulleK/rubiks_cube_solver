@@ -51,43 +51,46 @@ class Cube {
    * @param times how many times repeat the move, 1 by default.
    * To do the 2L' move on the cube, side = "left", direction = -1, times = 2
    */
-  public turn(side: Side, direction: MoveDirection, times: number = 1) {
-    for (let i = 0; i < times; i++) {
-      switch (side) {
-        case "left":
-          this.moveStickers(0, 1, 2, 3, direction);
-          this.moveStickers(8, 12, 22, 4, direction);
-          this.moveStickers(11, 15, 21, 7, direction);
-          break;
-        case "back":
-          this.moveStickers(4, 5, 6, 7, direction);
-          this.moveStickers(1, 21, 17, 9, direction);
-          this.moveStickers(0, 20, 16, 8, direction);
-          break;
-        case "up":
-          this.moveStickers(8, 9, 10, 11, direction);
-          this.moveStickers(1, 6, 19, 12, direction);
-          this.moveStickers(2, 7, 16, 13, direction);
-          break;
-        case "front":
-          this.moveStickers(12, 13, 14, 15, direction);
-          this.moveStickers(3, 11, 19, 23, direction);
-          this.moveStickers(2, 10, 18, 22, direction);
-          break;
-        case "right":
-          this.moveStickers(16, 17, 18, 19, direction);
-          this.moveStickers(9, 5, 23, 13, direction);
-          this.moveStickers(10, 6, 20, 14, direction);
-          break;
-        case "down":
-          this.moveStickers(20, 21, 22, 23, direction);
-          this.moveStickers(5, 0, 15, 18, direction);
-          this.moveStickers(4, 3, 14, 17, direction);
-          break;
-        default:
-          throw new Error("unknown side " + side);
-      }
+  public turn(side: Side, direction: MoveDirection) {
+    switch (side) {
+      case "left":
+        this.moveStickers(0, 1, 2, 3, direction);
+        this.moveStickers(8, 12, 22, 4, direction);
+        this.moveStickers(11, 15, 21, 7, direction);
+        break;
+      case "back":
+        this.moveStickers(4, 5, 6, 7, direction);
+        this.moveStickers(1, 21, 17, 9, direction);
+        this.moveStickers(0, 20, 16, 8, direction);
+        break;
+      case "up":
+        this.moveStickers(8, 9, 10, 11, direction);
+        this.moveStickers(1, 6, 19, 12, direction);
+        this.moveStickers(2, 7, 16, 13, direction);
+        break;
+      case "front":
+        this.moveStickers(12, 13, 14, 15, direction);
+        this.moveStickers(3, 11, 19, 23, direction);
+        this.moveStickers(2, 10, 18, 22, direction);
+        break;
+      case "right":
+        this.moveStickers(16, 17, 18, 19, direction);
+        this.moveStickers(9, 5, 23, 13, direction);
+        this.moveStickers(10, 6, 20, 14, direction);
+        break;
+      case "down":
+        this.moveStickers(20, 21, 22, 23, direction);
+        this.moveStickers(5, 0, 15, 18, direction);
+        this.moveStickers(4, 3, 14, 17, direction);
+        break;
+      default:
+        throw new Error("unknown side " + side);
     }
+  }
+
+  public turn2(side: Side, direction: MoveDirection) {
+    this.turn(side, direction);
+    this.turn(side, direction);
   }
 
   private moveStickers(
@@ -149,14 +152,14 @@ class Cube {
 const cube = new Cube();
 
 console.log(cube.visualizeCube());
-cube.turn("right", 1);
-cube.turn("up", 1);
-cube.turn("right", -1);
-cube.turn("up", -1);
+// cube.turn("right", 1);
+// cube.turn("up", 1);
+// cube.turn("right", -1);
+// cube.turn("up", -1);
 
-// cube.turn("right", 1, 2);
-// cube.turn("up", 1, 2);
-// cube.turn("right", 1, 2);
-// cube.turn("up", 1, 2);
+cube.turn2("right", 1);
+cube.turn2("up", 1);
+cube.turn2("right", 1);
+cube.turn2("up", 1);
 
 console.log(cube.visualizeCube());
