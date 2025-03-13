@@ -148,7 +148,6 @@ class Cube {
 
 const cube = new Cube();
 
-// console.log(cube.cubeState);
 console.log(cube.visualizeCube());
 cube.turn("right", 1);
 cube.turn("up", 1);
