@@ -6,15 +6,17 @@ import type {
   CubeStickerIndex,
 } from "./typings/cube_types";
 
-interface CubeInterface {
-  cubeState: Cube2by2;
-}
+import { ColorsANSI, backgroundColors, textColors } from "./colors.js";
 
-class Cube implements CubeInterface {
+class Cube {
   public cubeState: Cube2by2;
+  private COLORS: ColorsANSI;
+
   constructor() {
     this.cubeState = new Array(24);
     this.createInitialCube();
+    this.COLORS = textColors;
+    // this.COLORS = backgroundColors;
   }
 
   private createInitialCube() {
@@ -114,8 +116,21 @@ class Cube implements CubeInterface {
     }
   }
 
+  private colorizeCube() {
+    const cube: string[] = [...this.cubeState];
+    for (let i = 0; i < cube.length; i++) {
+      cube[i] = this.colorizeSticker(cube[i] as Color);
+    }
+    return cube;
+  }
+
+  // format a sticker to be displayed with color in the terminal
+  private colorizeSticker(sticker: Color) {
+    return `${this.COLORS[sticker]}${sticker}${this.COLORS.reset}`;
+  }
+
   public visualizeCube() {
-    const cube = this.cubeState;
+    const cube = this.colorizeCube();
     return `
              +------+
              | ${cube[8]}  ${cube[9]} |
