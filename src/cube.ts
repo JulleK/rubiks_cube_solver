@@ -1,10 +1,10 @@
-import {
+import type {
   Cube2by2,
   Color,
   Side,
   MoveDirection,
   CubeStickerIndex,
-} from "./cube_types";
+} from "./typings/cube_types";
 
 interface CubeInterface {
   cubeState: Cube2by2;

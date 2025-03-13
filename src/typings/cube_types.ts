@@ -1,4 +1,4 @@
-import { IntRange } from "./int_range";
+import type { IntRange } from "./int_range";
 
 // White, Yellow, Green, Blue, Red, Orange
 export type Color = "W" | "Y" | "G" | "B" | "R" | "O";
