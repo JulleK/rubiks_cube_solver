@@ -8,8 +8,8 @@ import type {
 
 import { ColorsANSI, backgroundColors, textColors } from "./colors.js";
 
-class Cube {
-  public cubeState: Cube2by2;
+export class Cube {
+  private cubeState: Cube2by2;
   private COLORS: ColorsANSI;
 
   constructor() {
@@ -132,6 +132,10 @@ class Cube {
     return `${this.COLORS[sticker]}${sticker}${this.COLORS.reset}`;
   }
 
+  public getCubeState() {
+    return this.cubeState;
+  }
+
   public visualizeCube() {
     const cube = this.colorizeCube();
     return `
@@ -149,17 +153,17 @@ class Cube {
   }
 }
 
-const cube = new Cube();
+// const cube = new Cube();
 
-console.log(cube.visualizeCube());
-// cube.turn("right", 1);
-// cube.turn("up", 1);
-// cube.turn("right", -1);
-// cube.turn("up", -1);
+// console.log(cube.visualizeCube());
+// // cube.turn("right", 1);
+// // cube.turn("up", 1);
+// // cube.turn("right", -1);
+// // cube.turn("up", -1);
 
-cube.turn2("right", 1);
-cube.turn2("up", 1);
-cube.turn2("right", 1);
-cube.turn2("up", 1);
+// cube.turn2("right", 1);
+// cube.turn2("up", 1);
+// cube.turn2("right", 1);
+// cube.turn2("up", 1);
 
-console.log(cube.visualizeCube());
+// console.log(cube.visualizeCube());
