@@ -6,7 +6,7 @@ import type {
   CubeStickerIndex,
 } from "./typings/cube_types";
 
-import { ColorsANSI, backgroundColors, textColors } from "./colors.js";
+import { ColorsANSI, textColors } from "./colors.js";
 import { validMoves } from "./validate_move.js";
 
 export class Cube {
@@ -17,7 +17,6 @@ export class Cube {
     this.cubeState = new Array(24);
     this.createInitialCube();
     this.COLORS = textColors;
-    // this.COLORS = backgroundColors;
   }
 
   private createInitialCube() {
@@ -162,18 +161,3 @@ export class Cube {
     `;
   }
 }
-
-// const cube = new Cube();
-
-// console.log(cube.visualizeCube());
-// // cube.turn("right", 1);
-// // cube.turn("up", 1);
-// // cube.turn("right", -1);
-// // cube.turn("up", -1);
-
-// cube.turn2("right", 1);
-// cube.turn2("up", 1);
-// cube.turn2("right", 1);
-// cube.turn2("up", 1);
-
-// console.log(cube.visualizeCube());
