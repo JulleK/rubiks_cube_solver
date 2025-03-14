@@ -41,4 +41,5 @@ function promptMove() {
   });
 }
 
+cube.scramble();
 promptMove();

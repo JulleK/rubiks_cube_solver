@@ -7,6 +7,7 @@ import type {
 } from "./typings/cube_types";
 
 import { ColorsANSI, backgroundColors, textColors } from "./colors.js";
+import { validMoves } from "./validate_move.js";
 
 export class Cube {
   private cubeState: Cube2by2;
@@ -41,6 +42,15 @@ export class Cube {
   private createInitialFace(color: Color, initialIndex: number = 0) {
     for (let i = initialIndex; i < initialIndex + 4; i++) {
       this.cubeState[i] = color;
+    }
+  }
+
+  public scramble() {
+    for (let i = 0; i < 20; i++) {
+      const randMove =
+        validMoves[Math.floor(Math.random() * validMoves.length)];
+      const randDirection = Math.random() < 0.5 ? 1 : -1;
+      this.turn(randMove, randDirection);
     }
   }
 

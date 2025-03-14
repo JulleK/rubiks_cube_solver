@@ -1,6 +1,6 @@
 import type { MoveDirection, Side } from "./typings/cube_types";
 
-const validMovesArray: Side[] = [
+export const validMoves: Side[] = [
   "up",
   "down",
   "left",
@@ -10,7 +10,7 @@ const validMovesArray: Side[] = [
 ];
 
 export function isValidMove(move: string): move is Side {
-  return validMovesArray.includes(move as Side);
+  return validMoves.includes(move as Side);
 }
 
 export function parseMove(move: string) {
