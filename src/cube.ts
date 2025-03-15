@@ -8,15 +8,21 @@ import type {
 
 import { ColorsANSI, textColors } from "./colors.js";
 import { validMoves } from "./validate_move.js";
+import { cornerMappings, Corners } from "./corners.js";
 
 export class Cube {
   private cubeState: Cube2by2;
-  private COLORS: ColorsANSI;
+  private colors: ColorsANSI;
+  private corners: Corners;
 
   constructor() {
     this.cubeState = new Array(24);
     this.createInitialCube();
-    this.COLORS = textColors;
+
+    this.corners = [];
+    this.mapCorners();
+
+    this.colors = textColors;
   }
 
   private createInitialCube() {
@@ -50,6 +56,17 @@ export class Cube {
         validMoves[Math.floor(Math.random() * validMoves.length)];
       const randDirection = Math.random() < 0.5 ? 1 : -1;
       this.turn(randMove, randDirection);
+    }
+
+    this.mapCorners();
+  }
+
+  private mapCorners() {
+    for (let i = 0; i < cornerMappings.length; i++) {
+      this.corners[i] = [];
+      for (let j = 0; j < cornerMappings[i].length; j++) {
+        this.corners[i][j] = this.cubeState[cornerMappings[i][j]];
+      }
     }
   }
 
@@ -95,6 +112,8 @@ export class Cube {
       default:
         throw new Error("unknown side " + side);
     }
+
+    this.mapCorners();
   }
 
   public turn2(side: Side, direction: MoveDirection) {
@@ -138,7 +157,7 @@ export class Cube {
 
   // format a sticker to be displayed with color in the terminal
   private colorizeSticker(sticker: Color) {
-    return `${this.COLORS[sticker]}${sticker}${this.COLORS.reset}`;
+    return `${this.colors[sticker]}${sticker}${this.colors.reset}`;
   }
 
   public getCubeState() {
