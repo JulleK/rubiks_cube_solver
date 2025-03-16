@@ -7,7 +7,7 @@ import type {
 } from "./typings/cube_types";
 
 import { ColorsANSI, textColors } from "./colors.js";
-import { validMoves } from "./validate_move.js";
+import { validMoves, parseMove, isValidMove } from "./validate_move.js";
 import { cornerMappings, Corners } from "./corners.js";
 
 export class Cube {
@@ -26,16 +26,6 @@ export class Cube {
   }
 
   private createInitialCube() {
-    //         +-------+
-    //         | 8   9 |
-    //         | 11 10 |
-    //  +------+-------+-------+------+
-    //  | 1  2 | 12 13 | 19 16 | 6  7 |
-    //  | 0  3 | 15 14 | 18 17 | 5  4 |
-    //  +------+-------+-------+------+
-    //         | 22 23 |
-    //         | 21 20 |
-    //         +-------+
     this.createInitialFace("R");
     this.createInitialFace("Y", 4);
     this.createInitialFace("G", 8);
@@ -119,6 +109,16 @@ export class Cube {
   public turn2(side: Side, direction: MoveDirection) {
     this.turn(side, direction);
     this.turn(side, direction);
+  }
+
+  public applyMoves(moves: string[]) {
+    for (let inputMove of moves) {
+      const { move, direction, times } = parseMove(inputMove);
+      if (isValidMove(move)) {
+        if (times === 2) this.turn2(move, direction);
+        else this.turn(move, direction);
+      }
+    }
   }
 
   private moveStickers(
