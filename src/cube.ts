@@ -26,12 +26,12 @@ export class Cube {
   }
 
   private createInitialCube() {
-    this.createInitialFace("R");
-    this.createInitialFace("Y", 4);
-    this.createInitialFace("G", 8);
-    this.createInitialFace("W", 12);
-    this.createInitialFace("O", 16);
-    this.createInitialFace("B", 20);
+    this.createInitialFace("B");
+    this.createInitialFace("O", 4);
+    this.createInitialFace("Y", 8);
+    this.createInitialFace("R", 12);
+    this.createInitialFace("G", 16);
+    this.createInitialFace("W", 20);
   }
 
   private createInitialFace(color: Color, initialIndex: number = 0) {
@@ -111,7 +111,7 @@ export class Cube {
     this.turn(side, direction);
   }
 
-  public applyMoves(moves: string[]) {
+  public applyMoves(...moves: string[]) {
     for (let inputMove of moves) {
       const { move, direction, times } = parseMove(inputMove);
       if (isValidMove(move)) {

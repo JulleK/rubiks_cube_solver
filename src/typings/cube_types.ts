@@ -5,6 +5,7 @@ export type Color = "W" | "Y" | "G" | "B" | "R" | "O";
 
 // export type Side = "U" | "D" | "L" | "R" | "F" | "B";
 export type Side = "up" | "down" | "left" | "right" | "front" | "back";
+export type Corner = [number, number, number];
 
 // 1 for clockwise moves, -1 for ' (prime) counterclockwise moves
 export type MoveDirection = 1 | -1;

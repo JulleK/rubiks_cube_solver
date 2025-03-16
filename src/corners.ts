@@ -9,9 +9,9 @@
 //         | 21 20 |
 //         +-------+
 
-import type { Color } from "./typings/cube_types";
+import type { Color, Corner } from "./typings/cube_types";
 
-type CornerMappings = Array<number[]>;
+type CornerMappings = Array<Corner>;
 export type Corners = Array<Color[]>;
 
 export const cornerMappings: CornerMappings = [
