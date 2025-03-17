@@ -33,7 +33,7 @@ export class CliCube {
         }
 
         times === 2
-          ? this.cube.turn2(move, direction)
+          ? this.cube.turn2(move)
           : this.cube.turn(move, direction);
 
         this.promptMove();

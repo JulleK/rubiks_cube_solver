@@ -1,5 +1,5 @@
 import { Cube } from "./cube.js";
-import { cornerMappings } from "./corners.js";
+import { bottomWhiteCornerSlots, cornerMappings, topRightCorner, topCornerSlots } from "./corners.js";
 import type { Color, Corner } from "./typings/cube_types.js";
 
 //         +-------+
@@ -21,6 +21,16 @@ export class Solver {
     else this.cube = cube;
   }
 
+  public solveFirstLayer() {
+    const whiteCorners = this.findWhiteCorners()
+
+    for (const corner of whiteCorners) {
+      this.insertWhiteCorner(corner)
+    }
+
+    // TODO!!!
+  }
+
   // step 1 of solving - find white corners
   public findWhiteCorners(): Array<Corner> {
     const cube = this.cube.getCubeState();
@@ -34,7 +44,7 @@ export class Solver {
     return whiteCorners;
   }
 
-  public moveWhiteCornerToBottom(corner: Corner) {
+  private insertWhiteCorner(corner: Corner) {
     const cube = this.cube.getCubeState();
     const [i1, i2, i3] = corner; // destructure corner indices
 
@@ -42,30 +52,36 @@ export class Solver {
     let colors = [cube[i1], cube[i2], cube[i3]].filter((c) => c !== "W");
 
     let correctSlot = this.getCorrectSlot(colors);
+    if (!correctSlot) return // skip if no matching slot found
 
-    // const bottomIndices = [20, 21, 22, 23];
 
-    // if the white corner is at the top, move it to the bottom
-    // if (
-    //   !bottomIndices.includes(i1) &&
-    //   !bottomIndices.includes(i2) &&
-    //   !bottomIndices.includes(i3)
-    // ) {
-    //   this.cube.applyMoves("R", "U", "R'");
-    // }
+    if (this.isInTopLayer(corner)) {
+      // NIE DZIALA, bo corner po zrobieniu ruchu nie jest updatowany i dalej ma te same kordynaty
+      // move white corner to top-right
+      console.log(`${corner} is in the top layer`)
+        this.cube.applyMove("U2")
+        console.log(corner)
+        console.log(this.isInTopRight(corner))
+    }
+
+    // TODO!!!
   }
 
   // Finds the correct bottom slot for a corner based on its two non-white colors
   private getCorrectSlot(colors: Color[]) {
-    const slots = {
-      "B-R": [3, 15, 22], // blue red
-      "G-R": [14, 18, 23], // green red
-      "G-O": [5, 17, 20], // green orange
-      "B-O": [0, 4, 21], // blue orange
-    };
+    const slots = bottomWhiteCornerSlots
     const colorKey = colors.sort().join("-");
     if (colorKey in slots) {
       return slots[colorKey as keyof typeof slots];
     }
+    else return null
   }
+
+  private isInTopLayer(corner: Corner) {
+    return topCornerSlots.some(position => JSON.stringify(position) === JSON.stringify(corner))
+  }
+
+  private isInTopRight(corner: Corner) {
+    return JSON.stringify(topRightCorner) === JSON.stringify(corner)
+}
 }

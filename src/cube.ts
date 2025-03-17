@@ -4,9 +4,10 @@ import type {
   Side,
   MoveDirection,
   CubeStickerIndex,
+  Move,
 } from "./typings/cube_types";
 
-import { ColorsANSI, textColors } from "./colors.js";
+import { backgroundColors, ColorsANSI, textColors } from "./colors.js";
 import { validMoves, parseMove, isValidMove } from "./validate_move.js";
 import { cornerMappings, Corners } from "./corners.js";
 
@@ -64,8 +65,7 @@ export class Cube {
    * Turns a side of the cube, for example left side
    * @param side
    * @param direction 1 for clockwise moves, -1 for counterclockwise
-   * @param times how many times repeat the move, 1 by default.
-   * To do the 2L' move on the cube, side = "left", direction = -1, times = 2
+   * To do the L' move on the cube, side = "left", direction = -1
    */
   public turn(side: Side, direction: MoveDirection) {
     switch (side) {
@@ -106,16 +106,21 @@ export class Cube {
     this.mapCorners();
   }
 
-  public turn2(side: Side, direction: MoveDirection) {
-    this.turn(side, direction);
-    this.turn(side, direction);
+  public turn2(side: Side) {
+    this.turn(side, 1);
+    this.turn(side, 1);
   }
 
-  public applyMoves(...moves: string[]) {
+  /**
+   * apllies a sequence of moves to the cube
+   * @param moves sequence of moves
+   * example usage: this.applyMove("R", "U", "R'")
+   */
+  public applyMove(...moves: Move[]) {
     for (let inputMove of moves) {
       const { move, direction, times } = parseMove(inputMove);
       if (isValidMove(move)) {
-        if (times === 2) this.turn2(move, direction);
+        if (times === 2) this.turn2(move);
         else this.turn(move, direction);
       }
     }

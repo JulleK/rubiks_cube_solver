@@ -24,3 +24,19 @@ export const cornerMappings: CornerMappings = [
   [10, 13, 19],
   [14, 18, 23],
 ];
+
+export const bottomWhiteCornerSlots = {
+  "B-R": [3, 15, 22], // blue red
+  "G-R": [14, 18, 23], // green red
+  "G-O": [5, 17, 20], // green orange
+  "B-O": [0, 4, 21], // blue orange
+};
+
+export const topCornerSlots = [
+  [1, 7, 8],
+  [2, 11, 12],
+  [6, 9, 16],
+  [10, 13, 19],
+]
+
+export const topRightCorner = [10, 13, 19];
