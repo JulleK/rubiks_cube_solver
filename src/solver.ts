@@ -1,5 +1,5 @@
 import { Cube } from "./cube.js";
-import { bottomWhiteCornerSlots, cornerMappings, topRightCorner, topCornerSlots } from "./corners.js";
+import { bottomCornerSlots, cornerMappings, topRightCorner, topCornerSlots } from "./corners.js";
 import type { Color, Corner } from "./typings/cube_types.js";
 
 //         +-------+
@@ -69,7 +69,7 @@ export class Solver {
 
   // Finds the correct bottom slot for a corner based on its two non-white colors
   private getCorrectSlot(colors: Color[]) {
-    const slots = bottomWhiteCornerSlots
+    const slots = bottomCornerSlots
     const colorKey = colors.sort().join("-");
     if (colorKey in slots) {
       return slots[colorKey as keyof typeof slots];

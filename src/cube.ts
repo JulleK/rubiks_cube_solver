@@ -62,9 +62,9 @@ export class Cube {
   }
 
   /**
-   * Turns a side of the cube, for example left side
+   * Turns a side of the cube, for example left side.
    * @param side
-   * @param direction 1 for clockwise moves, -1 for counterclockwise
+   * @param direction 1 for clockwise moves, -1 for counterclockwise.
    * To do the L' move on the cube, side = "left", direction = -1
    */
   public turn(side: Side, direction: MoveDirection) {

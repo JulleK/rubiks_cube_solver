@@ -10,7 +10,7 @@ const cli = new CliCube();
 // Solve the cube
 const solver = new Solver();
 
-const corners = solver.findWhiteCorners();
+// const corners = solver.findWhiteCorners();
 // const index = 3;
 // log(corners[index]);
 // log(solver.moveWhiteCornerToBottom(corners[index]));

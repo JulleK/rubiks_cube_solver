@@ -25,7 +25,7 @@ export const cornerMappings: CornerMappings = [
   [14, 18, 23],
 ];
 
-export const bottomWhiteCornerSlots = {
+export const bottomCornerSlots = {
   "B-R": [3, 15, 22], // blue red
   "G-R": [14, 18, 23], // green red
   "G-O": [5, 17, 20], // green orange
