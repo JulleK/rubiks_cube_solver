@@ -1,12 +1,13 @@
 import readline from "readline";
 import { Cube } from "./cube.js";
 import { isValidMove, parseMove } from "./validate_move.js";
+import { Cube2by2 } from "./typings/cube_types.js";
 
-export class CliCube {
-  public cube: Cube;
+export class CliCube extends Cube {
   private rl: readline.Interface;
-  constructor() {
-    this.cube = new Cube();
+  constructor(cube?: Cube2by2) {
+    super();
+    if (cube) this.setCubeState(cube);
 
     this.rl = readline.createInterface({
       input: process.stdin,
@@ -15,7 +16,7 @@ export class CliCube {
   }
   public promptMove() {
     console.clear();
-    console.log(this.cube.visualizeCube());
+    console.log(this.visualizeCube());
     this.rl.question("Enter your move: ", (userMove) => {
       if (userMove.toLowerCase() === "exit") {
         console.log("Goodbye!");
@@ -32,9 +33,7 @@ export class CliCube {
           }, 1000);
         }
 
-        times === 2
-          ? this.cube.turn2(move)
-          : this.cube.turn(move, direction);
+        times === 2 ? this.turn2(move) : this.turn(move, direction);
 
         this.promptMove();
       } catch (error) {
