@@ -13,6 +13,9 @@ This project is a **Rubik's Cube Solver** written entirely in TypeScript. It tak
 ![Starting Position](./images/starting_position.png?raw=true)
 
 - You can interact with the cube in the CLI
+
+![Cube in the terminal](./images/rubiks.gif)
+
 - My implementaion of the LBL solving algorithm
 - TypeScript for strong typing and maintainability
 
