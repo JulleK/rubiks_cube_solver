@@ -5,7 +5,7 @@ import {
   topRightCorner,
   topCornerSlots,
 } from "./corners.js";
-import type { Color, Corner } from "./typings/cube_types.js";
+import type { Color, Corner, Cube2by2, Move } from "./typings/cube_types.js";
 
 //         +-------+
 //         | 8   9 |
@@ -18,12 +18,10 @@ import type { Color, Corner } from "./typings/cube_types.js";
 //         | 21 20 |
 //         +-------+
 
-export class Solver {
-  public cube: Cube;
-
-  constructor(cube?: Cube) {
-    if (!cube) this.cube = new Cube();
-    else this.cube = cube;
+export class Solver extends Cube {
+  constructor(cube?: Cube2by2) {
+    super();
+    if (cube) this.setCubeState(cube);
   }
 
   public solveFirstLayer() {
@@ -38,7 +36,7 @@ export class Solver {
 
   // step 1 of solving - find white corners
   public findWhiteCorners(): Array<Corner> {
-    const cube = this.cube.getCubeState();
+    const cube = this.getCubeState();
     const whiteCorners: Array<Corner> = [];
     for (const corner of cornerMappings) {
       if (corner.some((index) => cube[index] === "W")) {
@@ -50,7 +48,7 @@ export class Solver {
   }
 
   private insertWhiteCorner(corner: Corner) {
-    const cube = this.cube.getCubeState();
+    const cube = this.getCubeState();
     const [i1, i2, i3] = corner; // destructure corner indices
 
     // identify the two non-white colors
@@ -60,12 +58,14 @@ export class Solver {
     if (!correctSlot) return; // skip if no matching slot found
 
     if (this.isInTopLayer(corner)) {
+      this.moveToTopRight(corner);
+
       // NIE DZIALA, bo corner po zrobieniu ruchu nie jest updatowany i dalej ma te same kordynaty
       // move white corner to top-right
-      console.log(`${corner} is in the top layer`);
-      this.cube.applyMove("U2");
-      console.log(corner);
-      console.log(this.isInTopRight(corner));
+      // console.log(`${corner} is in the top layer`);
+      // this.cube.applyMove("U");
+      // console.log(corner);
+      // console.log(this.isInTopRight(corner));
     }
 
     // TODO!!!
@@ -88,5 +88,24 @@ export class Solver {
 
   private isInTopRight(corner: Corner) {
     return JSON.stringify(topRightCorner) === JSON.stringify(corner);
+  }
+
+  private moveToTopRight(corner: Corner) {
+    console.log(corner);
+    let move: Move | null = null;
+    // these values are the corner indices,
+    // and come from mapping the cube array into actual cube
+    switch (corner[0]) {
+      case 1:
+        move = "U2";
+        break;
+      case 2:
+        move = "U'";
+        break;
+      case 6:
+        move = "U";
+    }
+
+    if (move) this.applyMove(move);
   }
 }

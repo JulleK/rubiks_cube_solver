@@ -52,7 +52,12 @@ export class Cube {
     this.mapCorners();
   }
 
-  private mapCorners() {
+  /**
+   * maps the cubeState 1D array, like ['W', 'R', 'Y', ...] <-- sticker colors.
+   * Into an array of corner coordinates, [ [0, 4, 21], [1, 7, 8], ... ].
+   * With the colors corresponding to the index, [ ["W", ...], ["R", ...], ...].
+   */
+  protected mapCorners() {
     for (let i = 0; i < cornerMappings.length; i++) {
       this.corners[i] = [];
       for (let j = 0; j < cornerMappings[i].length; j++) {
@@ -167,6 +172,11 @@ export class Cube {
 
   public getCubeState() {
     return this.cubeState;
+  }
+
+  protected setCubeState(cubeState: Cube2by2) {
+    this.cubeState = cubeState;
+    this.mapCorners();
   }
 
   public visualizeCube() {
