@@ -105,18 +105,6 @@ export class Solver extends Cube {
     }
   }
 
-  private orientTopRightWhiteCorner() {
-    const cube = this.getCubeState();
-    if (cube[topRightCorner[0]] === "W") {
-      this.applyMove("F'", "U2", "F", "U2", "R", "U'", "R'");
-    } else if (cube[topRightCorner[1]] === "W") {
-      this.applyMove("U", "R", "U'", "R'");
-    } else if (cube[topRightCorner[2]] === "W") {
-      this.applyMove("R", "U", "R'", "U'");
-    }
-    this.mapCorners();
-  }
-
   private insertTopRight(correctSlot: Corner) {
     // move the bottom layer into position
     let move: Move | null = null;
@@ -141,6 +129,18 @@ export class Solver extends Cube {
     if (move === "D") move = "D'";
     else if (move === "D'") move = "D";
     if (move) this.applyMove(move);
+    this.mapCorners();
+  }
+
+  private orientTopRightWhiteCorner() {
+    const cube = this.getCubeState();
+    if (cube[topRightCorner[0]] === "W") {
+      this.applyMove("F'", "U2", "F", "U2", "R", "U'", "R'");
+    } else if (cube[topRightCorner[1]] === "W") {
+      this.applyMove("U", "R", "U'", "R'");
+    } else if (cube[topRightCorner[2]] === "W") {
+      this.applyMove("R", "U", "R'", "U'");
+    }
     this.mapCorners();
   }
 }
