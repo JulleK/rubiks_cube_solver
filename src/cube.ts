@@ -7,9 +7,9 @@ import type {
   Move,
 } from "./typings/cube_types";
 
-import { backgroundColors, ColorsANSI, textColors } from "./colors.js";
-import { validMoves, parseMove, isValidMove } from "./validate_move.js";
-import { cornerMappings, Corners } from "./corners.js";
+import { backgroundColors, ColorsANSI, textColors } from "./utils/colors.js";
+import { validMoves, parseMove, isValidMove } from "./utils/validate_move.js";
+import { cornerMappings, Corners } from "./utils/corners.js";
 
 export class Cube {
   private cubeState: Cube2by2;

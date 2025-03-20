@@ -4,7 +4,7 @@ import {
   cornerMappings,
   topRightCorner,
   topCornerSlots,
-} from "./corners.js";
+} from "./utils/corners.js";
 import type { Color, Corner, Cube2by2, Move } from "./typings/cube_types.js";
 
 //         +-------+
@@ -107,12 +107,12 @@ export class Solver extends Cube {
 
   private orientTopRightWhiteCorner() {
     const cube = this.getCubeState();
-    if (cube[13] === "W") {
-      this.applyMove("U", "R", "U'", "R'");
-    } else if (cube[19] === "W") {
-      this.applyMove("R", "U", "R'", "U'");
-    } else if (cube[10] === "W") {
+    if (cube[topRightCorner[0]] === "W") {
       this.applyMove("F'", "U2", "F", "U2", "R", "U'", "R'");
+    } else if (cube[topRightCorner[1]] === "W") {
+      this.applyMove("U", "R", "U'", "R'");
+    } else if (cube[topRightCorner[2]] === "W") {
+      this.applyMove("R", "U", "R'", "U'");
     }
     this.mapCorners();
   }

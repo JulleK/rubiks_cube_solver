@@ -1,4 +1,4 @@
-import type { Color } from "./typings/cube_types";
+import type { Color } from "../typings/cube_types";
 
 export type ColorsANSI = Record<Color | "reset", string>;
 export const textColors: ColorsANSI = {

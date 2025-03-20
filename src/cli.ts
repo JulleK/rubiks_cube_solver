@@ -1,6 +1,6 @@
 import readline from "readline";
 import { Cube } from "./cube.js";
-import { isValidMove, parseMove } from "./validate_move.js";
+import { isValidMove, parseMove } from "./utils/validate_move.js";
 import { Cube2by2 } from "./typings/cube_types.js";
 
 export class CliCube extends Cube {

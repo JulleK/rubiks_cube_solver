@@ -1,4 +1,4 @@
-import type { MoveDirection, Side } from "./typings/cube_types";
+import type { MoveDirection, Side } from "../typings/cube_types";
 
 export const validMoves: Side[] = [
   "up",
