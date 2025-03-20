@@ -14,8 +14,8 @@ export class CliCube extends Cube {
       output: process.stdout,
     });
   }
-  public promptMove() {
-    console.clear();
+  public promptMove(clear = true) {
+    if (clear) console.clear();
     console.log(this.visualizeCube());
     this.rl.question("Enter your move: ", (userMove) => {
       if (userMove.toLowerCase() === "exit") {

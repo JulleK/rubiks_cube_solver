@@ -59,13 +59,7 @@ export class Solver extends Cube {
 
     if (this.isInTopLayer(corner)) {
       this.moveToTopRight(corner);
-
-      // NIE DZIALA, bo corner po zrobieniu ruchu nie jest updatowany i dalej ma te same kordynaty
-      // move white corner to top-right
-      // console.log(`${corner} is in the top layer`);
-      // this.cube.applyMove("U");
-      // console.log(corner);
-      // console.log(this.isInTopRight(corner));
+      this.insertTopRight(correctSlot);
     }
 
     // TODO!!!
@@ -86,15 +80,14 @@ export class Solver extends Cube {
     );
   }
 
-  private isInTopRight(corner: Corner) {
-    return JSON.stringify(topRightCorner) === JSON.stringify(corner);
-  }
+  // private isInTopRight(corner: Corner) {
+  //   return JSON.stringify(topRightCorner) === JSON.stringify(corner);
+  // }
 
   private moveToTopRight(corner: Corner) {
-    console.log(corner);
-    let move: Move | null = null;
-    // these values are the corner indices,
+    // these number values are the corner indices,
     // and come from mapping the cube array into actual cube
+    let move: Move | null = null;
     switch (corner[0]) {
       case 1:
         move = "U2";
@@ -106,6 +99,48 @@ export class Solver extends Cube {
         move = "U";
     }
 
+    if (move) {
+      this.applyMove(move);
+      this.mapCorners();
+    }
+  }
+
+  private orientTopRightWhiteCorner() {
+    const cube = this.getCubeState();
+    if (cube[13] === "W") {
+      this.applyMove("U", "R", "U'", "R'");
+    } else if (cube[19] === "W") {
+      this.applyMove("R", "U", "R'", "U'");
+    } else if (cube[10] === "W") {
+      this.applyMove("F'", "U2", "F", "U2", "R", "U'", "R'");
+    }
+    this.mapCorners();
+  }
+
+  private insertTopRight(correctSlot: Corner) {
+    // move the bottom layer into position
+    let move: Move | null = null;
+    console.log(correctSlot);
+    switch (correctSlot[0]) {
+      case 0:
+        move = "D2";
+        break;
+      case 3:
+        move = "D";
+        break;
+      case 5:
+        move = "D'";
+    }
+
     if (move) this.applyMove(move);
+
+    // insert the corner, with correct moves
+    this.orientTopRightWhiteCorner();
+
+    // move back the bottom layer
+    if (move === "D") move = "D'";
+    else if (move === "D'") move = "D";
+    if (move) this.applyMove(move);
+    this.mapCorners();
   }
 }
