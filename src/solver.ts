@@ -1,5 +1,10 @@
 import { Cube } from "./cube.js";
-import { bottomCornerSlots, cornerMappings, topRightCorner, topCornerSlots } from "./corners.js";
+import {
+  bottomWhiteCornerSlots,
+  cornerMappings,
+  topRightCorner,
+  topCornerSlots,
+} from "./corners.js";
 import type { Color, Corner } from "./typings/cube_types.js";
 
 //         +-------+
@@ -22,10 +27,10 @@ export class Solver {
   }
 
   public solveFirstLayer() {
-    const whiteCorners = this.findWhiteCorners()
+    const whiteCorners = this.findWhiteCorners();
 
     for (const corner of whiteCorners) {
-      this.insertWhiteCorner(corner)
+      this.insertWhiteCorner(corner);
     }
 
     // TODO!!!
@@ -52,16 +57,15 @@ export class Solver {
     let colors = [cube[i1], cube[i2], cube[i3]].filter((c) => c !== "W");
 
     let correctSlot = this.getCorrectSlot(colors);
-    if (!correctSlot) return // skip if no matching slot found
-
+    if (!correctSlot) return; // skip if no matching slot found
 
     if (this.isInTopLayer(corner)) {
       // NIE DZIALA, bo corner po zrobieniu ruchu nie jest updatowany i dalej ma te same kordynaty
       // move white corner to top-right
-      console.log(`${corner} is in the top layer`)
-        this.cube.applyMove("U2")
-        console.log(corner)
-        console.log(this.isInTopRight(corner))
+      console.log(`${corner} is in the top layer`);
+      this.cube.applyMove("U2");
+      console.log(corner);
+      console.log(this.isInTopRight(corner));
     }
 
     // TODO!!!
@@ -69,19 +73,20 @@ export class Solver {
 
   // Finds the correct bottom slot for a corner based on its two non-white colors
   private getCorrectSlot(colors: Color[]) {
-    const slots = bottomCornerSlots
+    const slots = bottomWhiteCornerSlots;
     const colorKey = colors.sort().join("-");
     if (colorKey in slots) {
       return slots[colorKey as keyof typeof slots];
-    }
-    else return null
+    } else return null;
   }
 
   private isInTopLayer(corner: Corner) {
-    return topCornerSlots.some(position => JSON.stringify(position) === JSON.stringify(corner))
+    return topCornerSlots.some(
+      (position) => JSON.stringify(position) === JSON.stringify(corner)
+    );
   }
 
   private isInTopRight(corner: Corner) {
-    return JSON.stringify(topRightCorner) === JSON.stringify(corner)
-}
+    return JSON.stringify(topRightCorner) === JSON.stringify(corner);
+  }
 }

@@ -14,8 +14,8 @@ const solver = new Solver();
 // const index = 3;
 // log(corners[index]);
 // log(solver.moveWhiteCornerToBottom(corners[index]));
-solver.cube.turn("right", 1)
-solver.cube.turn2("up")
+solver.cube.turn("right", 1);
+solver.cube.turn2("up");
 
 log(solver.cube.visualizeCube());
-solver.solveFirstLayer()
+solver.solveFirstLayer();
