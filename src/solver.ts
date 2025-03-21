@@ -80,10 +80,6 @@ export class Solver extends Cube {
     );
   }
 
-  // private isInTopRight(corner: Corner) {
-  //   return JSON.stringify(topRightCorner) === JSON.stringify(corner);
-  // }
-
   private moveToTopRight(corner: Corner) {
     // these number values are the corner indices,
     // and come from mapping the cube array into actual cube
@@ -132,6 +128,9 @@ export class Solver extends Cube {
     this.mapCorners();
   }
 
+  // if white facing right, do RUR'U'
+  // white facing left, do URU'R'
+  // white facing up, do F'U2FU2RU'R'
   private orientTopRightWhiteCorner() {
     const cube = this.getCubeState();
     if (cube[topRightCorner[0]] === "W") {
