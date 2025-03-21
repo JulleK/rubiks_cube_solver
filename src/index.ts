@@ -7,15 +7,11 @@ const cube = new Cube();
 
 cube.applyMoves("F'", "U2", "F", "U2", "R", "U'", "R'");
 
-const solver = new Solver(cube.getCubeState())
+const solver = new Solver(cube.getCubeState());
 
-log(cube.visualizeCube());
 solver.solveFirstLayer();
 
-const moves = solver.getMoveHistory();
-
-// WHY DOES cube CHANGE WHEN solver CHANGES
-log(cube.visualizeCube());
+// const moves = solver.getMoveHistory();
 
 // for (const move of moves) {
 //     setTimeout(() => {

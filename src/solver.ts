@@ -19,10 +19,11 @@ import type { Color, Corner, Cube2by2, Move } from "./typings/cube_types.js";
 //         +-------+
 
 export class Solver extends Cube {
-  private moveHistory: Move[]
-  constructor(cube?: Cube2by2) {
-    super(cube);
-    this.moveHistory = []
+  private moveHistory: Move[];
+  constructor(cube?: Cube | Cube2by2) {
+    if (cube) super(cube);
+    else super();
+    this.moveHistory = [];
   }
 
   public solveFirstLayer() {
@@ -98,7 +99,7 @@ export class Solver extends Cube {
 
     if (move) {
       this.applyMoves(move);
-      this.addMovesToHistory(move)
+      this.addMovesToHistory(move);
       this.mapCorners();
     }
   }
@@ -119,7 +120,7 @@ export class Solver extends Cube {
 
     if (move) {
       this.applyMoves(move);
-      this.addMovesToHistory(move)
+      this.addMovesToHistory(move);
     }
 
     // insert the corner, with correct moves
@@ -132,7 +133,7 @@ export class Solver extends Cube {
     else if (moveBack === "D'") moveBack = "D";
     if (moveBack) {
       this.applyMoves(moveBack);
-      this.addMovesToHistory(moveBack)
+      this.addMovesToHistory(moveBack);
     }
     this.mapCorners();
   }
@@ -144,24 +145,24 @@ export class Solver extends Cube {
     const cube = this.getCubeState();
     const moves: Move[] = [];
     if (cube[topRightCorner[0]] === "W") {
-      moves.push("F'", "U2", "F", "U2", "R", "U'", "R'")
+      moves.push("F'", "U2", "F", "U2", "R", "U'", "R'");
     } else if (cube[topRightCorner[1]] === "W") {
-      moves.push("U", "R", "U'", "R'")
+      moves.push("U", "R", "U'", "R'");
     } else if (cube[topRightCorner[2]] === "W") {
-      moves.push("R", "U", "R'", "U'")
+      moves.push("R", "U", "R'", "U'");
     }
-    this.applyMoves(...moves)
-    this.addMovesToHistory(...moves)
+    this.applyMoves(...moves);
+    this.addMovesToHistory(...moves);
     this.mapCorners();
   }
 
   private addMovesToHistory(...moves: Move[]) {
     for (const move of moves) {
-      this.moveHistory.push(move)
+      this.moveHistory.push(move);
     }
   }
 
   public getMoveHistory() {
-    return this.moveHistory 
+    return this.moveHistory;
   }
 }

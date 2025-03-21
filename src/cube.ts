@@ -7,7 +7,7 @@ import type {
   Move,
 } from "./typings/cube_types";
 
-import { backgroundColors, ColorsANSI, textColors } from "./utils/colors.js";
+import { ColorsANSI, textColors } from "./utils/colors.js";
 import { validMoves, parseMove, isValidMove } from "./utils/validate_move.js";
 import { cornerMappings, Corners } from "./utils/corners.js";
 
@@ -16,18 +16,26 @@ export class Cube {
   private colors: ColorsANSI;
   private corners: Corners;
 
-  constructor(initialCube?: Cube2by2) {
+  constructor(initialCube?: Cube2by2 | Cube) {
     if (initialCube) {
-      this.cubeState = initialCube
+      this.cubeState = this.initiateCube(initialCube);
     } else {
       this.cubeState = new Array(24);
       this.createInitialCube();
     }
-    
+
     this.corners = [];
     this.mapCorners();
 
     this.colors = textColors;
+  }
+
+  private initiateCube(initialCube: Cube | Cube2by2): Cube2by2 {
+    if (initialCube instanceof Cube) {
+      return [...initialCube.getCubeState()];
+    } else {
+      return [...initialCube];
+    }
   }
 
   private createInitialCube() {
