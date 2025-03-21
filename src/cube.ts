@@ -16,10 +16,14 @@ export class Cube {
   private colors: ColorsANSI;
   private corners: Corners;
 
-  constructor() {
-    this.cubeState = new Array(24);
-    this.createInitialCube();
-
+  constructor(cube?: Cube2by2) {
+    if (cube) {
+      this.cubeState = cube
+    } else {
+      this.cubeState = new Array(24);
+      this.createInitialCube();
+    }
+    
     this.corners = [];
     this.mapCorners();
 
@@ -121,7 +125,7 @@ export class Cube {
    * @param moves sequence of moves
    * example usage: this.applyMove("R", "U", "R'")
    */
-  public applyMove(...moves: Move[]) {
+  public applyMoves(...moves: Move[]) {
     for (let inputMove of moves) {
       const { move, direction, times } = parseMove(inputMove);
       if (isValidMove(move)) {

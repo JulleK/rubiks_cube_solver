@@ -19,9 +19,11 @@ import type { Color, Corner, Cube2by2, Move } from "./typings/cube_types.js";
 //         +-------+
 
 export class Solver extends Cube {
+  private moveHistory: Move[]
   constructor(cube?: Cube2by2) {
     super();
     if (cube) this.setCubeState(cube);
+    this.moveHistory = []
   }
 
   public solveFirstLayer() {
@@ -96,7 +98,8 @@ export class Solver extends Cube {
     }
 
     if (move) {
-      this.applyMove(move);
+      this.applyMoves(move);
+      this.addMovesToHistory(move)
       this.mapCorners();
     }
   }
@@ -104,7 +107,6 @@ export class Solver extends Cube {
   private insertTopRight(correctSlot: Corner) {
     // move the bottom layer into position
     let move: Move | null = null;
-    console.log(correctSlot);
     switch (correctSlot[0]) {
       case 0:
         move = "D2";
@@ -116,15 +118,23 @@ export class Solver extends Cube {
         move = "D'";
     }
 
-    if (move) this.applyMove(move);
+    if (move) {
+      this.applyMoves(move);
+      this.addMovesToHistory(move)
+    }
 
     // insert the corner, with correct moves
     this.orientTopRightWhiteCorner();
 
+    let moveBack: Move | null = null;
+
     // move back the bottom layer
-    if (move === "D") move = "D'";
-    else if (move === "D'") move = "D";
-    if (move) this.applyMove(move);
+    if (moveBack === "D") moveBack = "D'";
+    else if (moveBack === "D'") moveBack = "D";
+    if (moveBack) {
+      this.applyMoves(moveBack);
+      this.addMovesToHistory(moveBack)
+    }
     this.mapCorners();
   }
 
@@ -133,13 +143,26 @@ export class Solver extends Cube {
   // white facing up, do F'U2FU2RU'R'
   private orientTopRightWhiteCorner() {
     const cube = this.getCubeState();
+    const moves: Move[] = [];
     if (cube[topRightCorner[0]] === "W") {
-      this.applyMove("F'", "U2", "F", "U2", "R", "U'", "R'");
+      moves.push("F'", "U2", "F", "U2", "R", "U'", "R'")
     } else if (cube[topRightCorner[1]] === "W") {
-      this.applyMove("U", "R", "U'", "R'");
+      moves.push("U", "R", "U'", "R'")
     } else if (cube[topRightCorner[2]] === "W") {
-      this.applyMove("R", "U", "R'", "U'");
+      moves.push("R", "U", "R'", "U'")
     }
+    this.applyMoves(...moves)
+    this.addMovesToHistory(...moves)
     this.mapCorners();
+  }
+
+  private addMovesToHistory(...moves: Move[]) {
+    for (const move of moves) {
+      this.moveHistory.push(move)
+    }
+  }
+
+  public getMoveHistory() {
+    return this.moveHistory 
   }
 }

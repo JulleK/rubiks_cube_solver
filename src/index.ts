@@ -1,21 +1,31 @@
 import { log } from "console";
 import { CliCube } from "./cli.js";
 import { Solver } from "./solver.js";
+import { Cube } from "./cube.js";
 
-const solver = new Solver();
-// solver.scramble();
+const cube = new Cube();
 
-// const corners = solver.findWhiteCorners();
-// const index = 3;
-// log(corners[index]);
-// log(solver.moveWhiteCornerToBottom(corners[index]));
-// solver.turn2("up");
+cube.applyMoves("F'", "U2", "F", "U2", "R", "U'", "R'");
 
-// solver.applyMove("R", "U", "R'", "U'");
-// solver.applyMove("D");
-// log(solver.visualizeCube());
-// solver.solveFirstLayer();
-// log(solver.visualizeCube());
+const solver = new Solver(cube.getCubeState())
 
-const cli = new CliCube(solver.getCubeState());
-cli.promptMove();
+log(cube.visualizeCube());
+solver.solveFirstLayer();
+
+const moves = solver.getMoveHistory();
+
+log(cube.visualizeCube());
+
+// WHY IS DOES cube CHANGE WHEN solver CHANGES
+
+// for (const move of moves) {
+//     setTimeout(() => {
+//         // console.clear()
+//         log(move)
+//         cube.applyMoves(move)
+//         log(cube.visualizeCube())
+//     }, 1000)
+// }
+
+// // const cli = new CliCube(solver.getCubeState());
+// // cli.promptMove();
