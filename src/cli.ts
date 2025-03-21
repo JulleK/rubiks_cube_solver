@@ -6,8 +6,7 @@ import { Cube2by2 } from "./typings/cube_types.js";
 export class CliCube extends Cube {
   private rl: readline.Interface;
   constructor(cube?: Cube2by2) {
-    super();
-    if (cube) this.setCubeState(cube);
+    super(cube);
 
     this.rl = readline.createInterface({
       input: process.stdin,

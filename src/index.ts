@@ -14,9 +14,8 @@ solver.solveFirstLayer();
 
 const moves = solver.getMoveHistory();
 
+// WHY DOES cube CHANGE WHEN solver CHANGES
 log(cube.visualizeCube());
-
-// WHY IS DOES cube CHANGE WHEN solver CHANGES
 
 // for (const move of moves) {
 //     setTimeout(() => {

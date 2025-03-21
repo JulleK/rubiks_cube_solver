@@ -16,9 +16,9 @@ export class Cube {
   private colors: ColorsANSI;
   private corners: Corners;
 
-  constructor(cube?: Cube2by2) {
-    if (cube) {
-      this.cubeState = cube
+  constructor(initialCube?: Cube2by2) {
+    if (initialCube) {
+      this.cubeState = initialCube
     } else {
       this.cubeState = new Array(24);
       this.createInitialCube();

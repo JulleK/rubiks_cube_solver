@@ -21,8 +21,7 @@ import type { Color, Corner, Cube2by2, Move } from "./typings/cube_types.js";
 export class Solver extends Cube {
   private moveHistory: Move[]
   constructor(cube?: Cube2by2) {
-    super();
-    if (cube) this.setCubeState(cube);
+    super(cube);
     this.moveHistory = []
   }
 
