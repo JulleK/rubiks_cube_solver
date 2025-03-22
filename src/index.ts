@@ -7,29 +7,23 @@ import { displayMoveAsAscii } from "./utils/move_ascii.js";
 
 const cube = new Cube();
 
-cube.applyMoves("F'", "U2", "F", "U2", "R", "U'", "R'");
+// cube.applyMoves("F'", "U2", "F", "U2", "R", "U'", "R'");
 cube.scramble();
 
 const solver = new Solver(cube);
-
 solver.solveFirstLayer();
 
 const moves = solver.getMoveHistory();
-
 console.clear();
-log(cube.visualizeCube());
 
+log(cube.visualizeCube());
 for (const move of moves) {
   await new Promise((resolve) => setTimeout(resolve, 3000));
   console.clear();
   cube.applyMoves(move);
   log(cube.visualizeCube());
-  //   log(move);
   displayMoveAsAscii(move);
 }
-
-// log(solver.visualizeCube());
-// log(cube.visualizeCube());
 
 // const cli = new CliCube(solver.getCubeState());
 // cli.promptMove();

@@ -27,10 +27,18 @@ export class Solver extends Cube {
   }
 
   public solveFirstLayer() {
-    const whiteCorners = this.findWhiteCorners();
+    // for (const corner of topCorners) {
+    //   this.insertWhiteCorner(corner);
+    // }
 
-    for (const corner of whiteCorners) {
-      this.insertWhiteCorner(corner);
+    while (!this.areAllWhiteCornersInBottom()) {
+      const whiteCorners = this.findWhiteCorners();
+      for (const corner of whiteCorners) {
+        if (this.isInTopLayer(corner)) {
+          this.insertWhiteCorner(corner);
+          break;
+        }
+      }
     }
 
     // TODO!!!
@@ -82,6 +90,14 @@ export class Solver extends Cube {
     );
   }
 
+  private areAllWhiteCornersInBottom() {
+    const whiteCorners = this.findWhiteCorners();
+    for (let corner of whiteCorners) {
+      if (this.isInTopLayer(corner)) return false;
+    }
+    return true;
+  }
+
   private moveToTopRight(corner: Corner) {
     // these number values are the corner indices,
     // and come from mapping the cube array into actual cube
@@ -129,8 +145,9 @@ export class Solver extends Cube {
     let moveBack: Move | null = null;
 
     // move back the bottom layer
-    if (moveBack === "D") moveBack = "D'";
-    else if (moveBack === "D'") moveBack = "D";
+    if (move === "D") moveBack = "D'";
+    else if (move === "D'") moveBack = "D";
+    else if (move === "D2") moveBack = "D2";
     if (moveBack) {
       this.applyMoves(moveBack);
       this.addMovesToHistory(moveBack);
