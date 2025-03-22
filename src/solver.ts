@@ -163,6 +163,6 @@ export class Solver extends Cube {
   }
 
   public getMoveHistory() {
-    return this.moveHistory;
+    return [...this.moveHistory];
   }
 }

@@ -183,7 +183,7 @@ export class Cube {
   }
 
   public getCubeState() {
-    return this.cubeState;
+    return [...this.cubeState];
   }
 
   protected setCubeState(cubeState: Cube2by2) {
