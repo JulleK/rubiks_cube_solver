@@ -67,7 +67,7 @@ Example usage:
 
 Using the solving algorithm on a scrambled cube
 ```typescript
-import { Solver } from "./src/solver.js";
+import { Solver } from "./solver.js";
 
 const solver = new Solver();
 solver.scramble();
@@ -76,7 +76,7 @@ solver.solve();
 
 This code allows you to freely interact with the cube in the command line
 ```typescript
-import { CliCube } from "./src/cli.js";
+import { CliCube } from "./cli.js";
 
 const cli = new CliCube();
 cli.promptMove();
