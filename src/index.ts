@@ -6,12 +6,11 @@ import { displayMoveAsAscii } from "./utils/move_ascii.js";
 import { sleep } from "./utils/sleep.js";
 
 const cube = new Cube();
-cube.scramble();
+// cube.scramble();
+
+cube.applyMoves("R", "U2", "R'", "F", "U'", "F'", "U'", "R", "U", "R'", "R");
 
 solveAndVisualize(cube);
-
-// const cli = new CliCube(solver.getCubeState());
-// cli.promptMove();
 
 async function solveAndVisualize(cube: Cube) {
   const solver = new Solver(cube);
@@ -22,10 +21,13 @@ async function solveAndVisualize(cube: Cube) {
 
   log(cube.visualizeCube());
   for (const move of moves) {
-    await sleep();
+    await sleep(1000);
     console.clear();
     cube.applyMoves(move);
     log(cube.visualizeCube());
     displayMoveAsAscii(move);
   }
 }
+
+// const cli = new CliCube(solver.getCubeState());
+// cli.promptMove();

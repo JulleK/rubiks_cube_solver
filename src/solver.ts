@@ -5,7 +5,7 @@ import {
   topRightCorner,
   topCornerSlots,
 } from "./utils/corners.js";
-import type { Color, Corner, Cube2by2, Move } from "./typings/cube_types.js";
+import type { Corner, Cube2by2, Move } from "./typings/cube_types.js";
 
 //         +-------+
 //         | 8   9 |
@@ -27,21 +27,19 @@ export class Solver extends Cube {
   }
 
   public solveFirstLayer() {
-    // for (const corner of topCorners) {
-    //   this.insertWhiteCorner(corner);
-    // }
-
-    while (!this.areAllWhiteCornersInBottom()) {
+    while (
+      !this.areWhiteCornersCorrectlyPlaced() &&
+      this.moveHistory.length < 30
+    ) {
       const whiteCorners = this.findWhiteCorners();
       for (const corner of whiteCorners) {
         if (this.isInTopLayer(corner)) {
+          console.log("log");
           this.insertWhiteCorner(corner);
           break;
         }
       }
     }
-
-    // TODO!!!
   }
 
   // step 1 of solving - find white corners
@@ -58,30 +56,36 @@ export class Solver extends Cube {
   }
 
   private insertWhiteCorner(corner: Corner) {
+    let correctSlot = this.getCorrectSlot(corner);
+    if (!correctSlot) return; // skip if no matching slot found
+
+    if (this.isInTopLayer(corner)) {
+      this.moveToTopRight(corner);
+      this.insertTopRight(correctSlot);
+    } else if (!this.isCornerInCorrectSlot(corner)) {
+      // TODO!!!
+      //  ALGORITHMS WHEN WHITE CORNER ON BOTTOM LAYER BUT INCORRECT SLOT
+    }
+  }
+
+  // Finds the correct bottom slot for a corner
+  private getCorrectSlot(corner: Corner) {
     const cube = this.getCubeState();
     const [i1, i2, i3] = corner; // destructure corner indices
 
     // identify the two non-white colors
     let colors = [cube[i1], cube[i2], cube[i3]].filter((c) => c !== "W");
 
-    let correctSlot = this.getCorrectSlot(colors);
-    if (!correctSlot) return; // skip if no matching slot found
-
-    if (this.isInTopLayer(corner)) {
-      this.moveToTopRight(corner);
-      this.insertTopRight(correctSlot);
-    }
-
-    // TODO!!!
-  }
-
-  // Finds the correct bottom slot for a corner based on its two non-white colors
-  private getCorrectSlot(colors: Color[]) {
     const slots = bottomWhiteCornerSlots;
     const colorKey = colors.sort().join("-");
     if (colorKey in slots) {
       return slots[colorKey as keyof typeof slots];
     } else return null;
+  }
+
+  private isCornerInCorrectSlot(corner: Corner) {
+    const slot = this.getCorrectSlot(corner);
+    return JSON.stringify(corner) === JSON.stringify(slot);
   }
 
   private isInTopLayer(corner: Corner) {
@@ -90,10 +94,14 @@ export class Solver extends Cube {
     );
   }
 
-  private areAllWhiteCornersInBottom() {
+  private areWhiteCornersCorrectlyPlaced() {
     const whiteCorners = this.findWhiteCorners();
     for (let corner of whiteCorners) {
+      // return false: if in top layer
       if (this.isInTopLayer(corner)) return false;
+
+      // or if in incorrect slot
+      if (!this.isCornerInCorrectSlot(corner)) return false;
     }
     return true;
   }
@@ -166,7 +174,7 @@ export class Solver extends Cube {
     } else if (cube[topRightCorner[1]] === "W") {
       moves.push("U", "R", "U'", "R'");
     } else if (cube[topRightCorner[2]] === "W") {
-      moves.push("R", "U", "R'", "U'");
+      moves.push("R", "U", "R'");
     }
     this.applyMoves(...moves);
     this.addMovesToHistory(...moves);
