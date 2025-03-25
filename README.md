@@ -61,10 +61,16 @@ tsc
 
 ## ▶️ Usage
 
-start the app:
+Start the app:
 
 ```sh
 npm start
+```
+
+Which is equivalent to:
+
+```sh
+node dist/index.js
 ```
 
 Example usage:
