@@ -33,11 +33,7 @@ export class Solver extends Cube {
     ) {
       const whiteCorners = this.findWhiteCorners();
       for (const corner of whiteCorners) {
-        if (this.isInTopLayer(corner)) {
-          console.log("log");
-          this.insertWhiteCorner(corner);
-          break;
-        }
+        this.insertWhiteCorner(corner);
       }
     }
   }
@@ -63,8 +59,8 @@ export class Solver extends Cube {
       this.moveToTopRight(corner);
       this.insertTopRight(correctSlot);
     } else if (!this.isCornerInCorrectSlot(corner)) {
-      // TODO!!!
-      //  ALGORITHMS WHEN WHITE CORNER ON BOTTOM LAYER BUT INCORRECT SLOT
+      console.log(`${corner} not in the bottom`);
+      this.moveWhiteCornerFromBottom(corner);
     }
   }
 
@@ -122,9 +118,7 @@ export class Solver extends Cube {
     }
 
     if (move) {
-      this.applyMoves(move);
-      this.addMovesToHistory(move);
-      this.mapCorners();
+      this.solverApplyMoves(move);
     }
   }
 
@@ -142,10 +136,7 @@ export class Solver extends Cube {
         move = "D'";
     }
 
-    if (move) {
-      this.applyMoves(move);
-      this.addMovesToHistory(move);
-    }
+    if (move) this.solverApplyMoves(move);
 
     // insert the corner, with correct moves
     this.orientTopRightWhiteCorner();
@@ -156,11 +147,8 @@ export class Solver extends Cube {
     if (move === "D") moveBack = "D'";
     else if (move === "D'") moveBack = "D";
     else if (move === "D2") moveBack = "D2";
-    if (moveBack) {
-      this.applyMoves(moveBack);
-      this.addMovesToHistory(moveBack);
-    }
-    this.mapCorners();
+
+    if (moveBack) this.solverApplyMoves(moveBack);
   }
 
   // if white facing right, do RUR'U'
@@ -176,6 +164,31 @@ export class Solver extends Cube {
     } else if (cube[topRightCorner[2]] === "W") {
       moves.push("R", "U", "R'");
     }
+
+    this.solverApplyMoves(...moves);
+  }
+
+  private moveWhiteCornerFromBottom(corner: Corner) {
+    const moves: Move[] = [];
+    switch (corner[0]) {
+      case 0:
+        moves.push("B'", "U'", "B");
+        break;
+      case 3:
+        moves.push("F", "U'", "F'");
+        break;
+      case 5:
+        moves.push("B", "U", "B'");
+        break;
+      case 14:
+        moves.push("F'", "U'", "F");
+        break;
+    }
+
+    this.solverApplyMoves(...moves);
+  }
+
+  private solverApplyMoves(...moves: Move[]) {
     this.applyMoves(...moves);
     this.addMovesToHistory(...moves);
     this.mapCorners();
