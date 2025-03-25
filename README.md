@@ -53,10 +53,17 @@ cd rubiks-cube-solver
 npm install
 ```
 
-## ▶️ Usage
+Compile the Typescript files into JavaScript (important!):
 
 ```sh
 tsc
+```
+
+## ▶️ Usage
+
+start the app:
+
+```sh
 npm start
 ```
 
