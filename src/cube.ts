@@ -5,7 +5,7 @@ import type {
   MoveDirection,
   CubeStickerIndex,
   Move,
-} from "./typings/cube_types";
+} from "./typings/cube_types.js";
 
 import { ColorsANSI, textColors } from "./utils/colors.js";
 import { validMoves, parseMove, isValidMove } from "./utils/validate_move.js";

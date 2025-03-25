@@ -37,7 +37,7 @@ export class Solver extends Cube {
     const cube = this.getCubeState();
     const whiteCorners: Array<Corner> = [];
     for (const corner of cornerMappings) {
-      if (corner.some((index) => cube[index] === "W")) {
+      if (corner.some((index: number) => cube[index] === "W")) {
         whiteCorners.push(corner);
       }
     }
@@ -54,7 +54,7 @@ export class Solver extends Cube {
       this.moveToTopRight(corner);
       this.insertTopRight(correctSlot);
     } else if (!this.isCornerInCorrectSlot(corner)) {
-      console.log(`${corner} not in the bottom`);
+      // TODO: add checking if correctly oriented, not only if in correct slot
       this.moveWhiteCornerFromBottom(corner);
     }
   }

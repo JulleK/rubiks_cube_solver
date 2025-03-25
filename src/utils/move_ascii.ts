@@ -1,4 +1,4 @@
-import { Move } from "../typings/cube_types";
+import { Move } from "../typings/cube_types.js";
 
 export function displayMoveAsAscii(move: Move) {
   console.log(movesToAscii[move]);
