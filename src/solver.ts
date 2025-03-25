@@ -7,17 +7,6 @@ import {
 } from "./utils/corners.js";
 import type { Corner, Cube2by2, Move } from "./typings/cube_types.js";
 
-//         +-------+
-//         | 8   9 |
-//         | 11 10 |
-//  +------+-------+-------+------+
-//  | 1  2 | 12 13 | 19 16 | 6  7 |
-//  | 0  3 | 15 14 | 18 17 | 5  4 |
-//  +------+-------+-------+------+
-//         | 22 23 |
-//         | 21 20 |
-//         +-------+
-
 export class Solver extends Cube {
   private moveHistory: Move[];
   constructor(cube?: Cube | Cube2by2) {
@@ -26,7 +15,12 @@ export class Solver extends Cube {
     this.moveHistory = [];
   }
 
-  public solveFirstLayer() {
+  public solve() {
+    this.solveFirstLayer();
+    this.solveSecondLayer();
+  }
+
+  private solveFirstLayer() {
     while (
       !this.areWhiteCornersCorrectlyPlaced() &&
       this.moveHistory.length < 30
@@ -51,6 +45,7 @@ export class Solver extends Cube {
     return whiteCorners;
   }
 
+  // try to insert a white corner
   private insertWhiteCorner(corner: Corner) {
     let correctSlot = this.getCorrectSlot(corner);
     if (!correctSlot) return; // skip if no matching slot found
@@ -124,6 +119,16 @@ export class Solver extends Cube {
 
   private insertTopRight(correctSlot: Corner) {
     // move the bottom layer into position
+    const move = this.prepareBottomForInsert(correctSlot);
+
+    // insert the corner, with correct moves
+    this.orientTopRightWhiteCorner();
+
+    // move back the bottom layer
+    if (move) this.unprepareBottomForInsert(move);
+  }
+
+  private prepareBottomForInsert(correctSlot: Corner) {
     let move: Move | null = null;
     switch (correctSlot[0]) {
       case 0:
@@ -137,13 +142,12 @@ export class Solver extends Cube {
     }
 
     if (move) this.solverApplyMoves(move);
+    return move;
+  }
 
-    // insert the corner, with correct moves
-    this.orientTopRightWhiteCorner();
-
+  private unprepareBottomForInsert(move: Move) {
     let moveBack: Move | null = null;
 
-    // move back the bottom layer
     if (move === "D") moveBack = "D'";
     else if (move === "D'") moveBack = "D";
     else if (move === "D2") moveBack = "D2";
@@ -187,6 +191,23 @@ export class Solver extends Cube {
 
     this.solverApplyMoves(...moves);
   }
+
+  // ---- SOLVING TOP LAYER ----
+
+  private solveSecondLayer() {
+    this.mapCorners();
+
+    // TODO
+    // find the one correct corner
+    // if none or more than one correct:
+    //   do "U" move
+    // if exactly all correct:
+    //   do the algorithm from LBL
+    // if all correct:
+    //   done!
+  }
+
+  // ---- UTILITY METHODS ----
 
   private solverApplyMoves(...moves: Move[]) {
     this.applyMoves(...moves);
