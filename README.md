@@ -4,14 +4,11 @@
 
 ## 📝 Overview
 
-This project is a **Rubik's Cube Solver** written entirely in TypeScript. It takes a scrambled cube state as input and outputs an optimal solution using not very efficient (but my own) implementation of the LBL method
+This project is a **Rubik's Cube Solver** written entirely in TypeScript. Using an object oriented approach, the Solver class takes a scrambled cube as an input and solves it using my own implementation of the LBL method.
 
 ## 🚀 Features
 
 - Cube visualization in the terminal
-
-![Starting Position](./images/starting_position.png?raw=true)
-
 - You can interact with the cube in the CLI
 
 ![Cube in the terminal](./images/rubiks.gif)
@@ -56,11 +53,24 @@ cd rubiks-cube-solver
 npm install
 ```
 
-## ▶️ Usage
+Compile the Typescript files into JavaScript (important!):
 
 ```sh
 tsc
+```
+
+## ▶️ Usage
+
+Start the app:
+
+```sh
 npm start
+```
+
+Which is equivalent to:
+
+```sh
+node dist/index.js
 ```
 
 Example usage:
