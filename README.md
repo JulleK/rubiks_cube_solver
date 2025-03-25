@@ -60,8 +60,6 @@ tsc
 npm start
 ```
 
-The entry point to the project is `src/index.ts`
-
 Example usage:
 
 Using the solving algorithm on a scrambled cube
