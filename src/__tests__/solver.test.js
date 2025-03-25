@@ -1,7 +1,6 @@
-import { Cube } from "../src/cube";
-import { Solver } from "../src/solver";
-
-function isCubeSolved(cube: Cube): boolean {
+import { Cube } from "../cube";
+import { Solver } from "../solver";
+function isCubeSolved(cube) {
   const cubeState = cube.getCubeState();
   const correctCubeState = new Cube().getCubeState();
   return (
@@ -12,15 +11,12 @@ function isCubeSolved(cube: Cube): boolean {
   );
   //   return JSON.stringify(cubeState) === JSON.stringify(correctCubeState);
 }
-
 describe("Solver", () => {
   test("Solver should solve a scrambled cube", () => {
     const cube = new Cube();
     cube.scramble();
-
     const solver = new Solver(cube);
     solver.solve();
-
     // why can't I see the logs in the console??
     if (!isCubeSolved) {
       console.error("❌ Test failed! Scrambled Cube State:");
@@ -28,7 +24,6 @@ describe("Solver", () => {
       console.error("🛑 Final (incorrect) Cube State:");
       console.error(solver.visualizeCube());
     }
-
     expect(isCubeSolved(solver)).toBe(true);
   });
 });
