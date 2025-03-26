@@ -1,9 +1,9 @@
 import { Cube } from "./cube.js";
 import {
-  bottomWhiteCornerSlots,
   cornerMappings,
   topRightCorner,
   topCornerSlots,
+  correctCornerSlots,
 } from "./utils/corners.js";
 import type { Corner, Cube2by2, Move } from "./typings/cube_types.js";
 
@@ -22,6 +22,8 @@ export class Solver extends Cube {
     this.solveFirstLayer();
     this.solveSecondLayer();
   }
+
+  // ---- SOLVING BOTTOM LAYER ----
 
   private solveFirstLayer() {
     while (!this.areWhiteCornersCorrectlyPlaced()) {
@@ -65,25 +67,25 @@ export class Solver extends Cube {
     const cube = this.getCubeState();
     const [i1, i2, i3] = corner; // destructure corner indices
 
-    // identify the two non-white colors
-    let colors = [cube[i1], cube[i2], cube[i3]].filter((c) => c !== "W");
+    // identify the three colors
+    let colors = [cube[i1], cube[i2], cube[i3]];
 
-    const slots = bottomWhiteCornerSlots;
+    const slots = correctCornerSlots;
     const colorKey = colors.sort().join("-");
     if (colorKey in slots) {
       return slots[colorKey as keyof typeof slots];
     } else return null;
   }
 
+  private isCornerInCorrectSlot(corner: Corner) {
+    const slot = this.getCorrectSlot(corner);
+    return JSON.stringify(corner) === JSON.stringify(slot);
+  }
+
   private isInTopLayer(corner: Corner) {
     return topCornerSlots.some(
       (position) => JSON.stringify(position) === JSON.stringify(corner)
     );
-  }
-
-  private isCornerInCorrectSlot(corner: Corner) {
-    const slot = this.getCorrectSlot(corner);
-    return JSON.stringify(corner) === JSON.stringify(slot);
   }
 
   private isWhiteCornerOriented(corner: Corner) {
@@ -230,6 +232,12 @@ export class Solver extends Cube {
   private solveSecondLayer() {
     this.mapCorners();
 
+    const count = this.countCorrectlyPlacedYellowCorners();
+    if (count === 4) {
+      // All corners correctly placed, now rotate them
+    } else if (count === 1) {
+      this.swapYellowCorners();
+    }
     // TODO
     // find the one correct corner
     // if none or more than one correct:
@@ -238,6 +246,26 @@ export class Solver extends Cube {
     //   do the algorithm from LBL
     // if all correct:
     //   done!
+  }
+
+  private countCorrectlyPlacedYellowCorners() {
+    let count = 0;
+    for (const corner of topCornerSlots) {
+      if (this.isCornerInCorrectSlot(corner)) {
+        count++;
+      }
+    }
+    return count;
+  }
+
+  private swapYellowCorners() {
+    // move the one correct corner into position - top left corner [2, 11, 12]
+    this.solverApplyMoves("R", "U'", "L'", "U", "R'", "U'", "L");
+    // check if other corners correctly solved
+
+    // if not do the algorithm once more
+
+    // when done, move back the top layer into it's previous position
   }
 
   // ---- UTILITY METHODS ----

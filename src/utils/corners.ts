@@ -9,10 +9,9 @@
 //         | 21 20 |
 //         +-------+
 
-import type { Color, Corner } from "../typings/cube_types.js";
+import type { Corner } from "../typings/cube_types.js";
 
 type CornerMappings = Array<Corner>;
-export type Corners = Array<Color[]>;
 
 export const cornerMappings: CornerMappings = [
   [0, 4, 21],
@@ -25,14 +24,18 @@ export const cornerMappings: CornerMappings = [
   [14, 18, 23],
 ];
 
-export const bottomWhiteCornerSlots: Record<string, Corner> = {
-  "B-R": [3, 15, 22], // blue red
-  "G-R": [14, 18, 23], // green red
-  "G-O": [5, 17, 20], // green orange
-  "B-O": [0, 4, 21], // blue orange
+export const correctCornerSlots: Record<string, Corner> = {
+  "B-R-W": [3, 15, 22], // blue red white
+  "G-R-W": [14, 18, 23], // green red white
+  "G-O-W": [5, 17, 20], // green orange white
+  "B-O-W": [0, 4, 21], // blue orange white
+  "B-R-Y": [2, 11, 12], // blue red yellow
+  "G-R-Y": [10, 13, 19], // green red yellow
+  "G-O-Y": [6, 9, 16], // green orange yellow
+  "B-O-Y": [1, 7, 8], // blue orange yellow
 };
 
-export const topCornerSlots = [
+export const topCornerSlots: Array<Corner> = [
   [1, 7, 8],
   [2, 11, 12],
   [6, 9, 16],

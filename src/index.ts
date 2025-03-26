@@ -7,14 +7,8 @@ import { sleep } from "./utils/sleep.js";
 import { scrambles } from "./utils/testScrambles.js";
 
 const cube = new Cube();
-// cube.scramble();
-cube.setCubeState(scrambles[0]);
-
-// scramble with all white corners at the bottom
-// cube.applyMoves("R", "U2", "R'", "F", "U'", "F'", "U'", "R", "U", "R'");
-
-console.clear();
-console.log(cube.visualizeCube());
+cube.scramble();
+// cube.setCubeState(scrambles[0]);
 
 solveAndVisualize(cube);
 
@@ -23,16 +17,19 @@ async function solveAndVisualize(cube: Cube) {
   solver.solve();
 
   const moves = solver.getMoveHistory();
-  console.clear();
+  // console.clear();
 
-  log(cube.visualizeCube());
+  // log(cube.visualizeCube());
   for (const move of moves) {
-    await sleep(500);
-    console.clear();
+    // await sleep(50);
+    // console.clear();
     cube.applyMoves(move);
-    log(cube.visualizeCube());
-    displayMoveAsAscii(move);
+
+    // log(cube.visualizeCube());
+    // displayMoveAsAscii(move);
   }
+  cube.applyMoves("L", "R'");
+  log(cube.visualizeCube());
 }
 
 // const cli = new CliCube(solver.getCubeState());
