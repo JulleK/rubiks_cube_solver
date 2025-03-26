@@ -24,10 +24,7 @@ export class Solver extends Cube {
   }
 
   private solveFirstLayer() {
-    while (
-      !this.areWhiteCornersCorrectlyPlaced() &&
-      this.moveHistory.length < 30
-    ) {
+    while (!this.areWhiteCornersCorrectlyPlaced()) {
       const whiteCorners = this.findWhiteCorners();
       for (const corner of whiteCorners) {
         this.insertWhiteCorner(corner);
@@ -57,8 +54,9 @@ export class Solver extends Cube {
       this.moveToTopRight(corner);
       this.insertTopRight(correctSlot);
     } else if (!this.isCornerInCorrectSlot(corner)) {
-      // TODO: add checking if correctly oriented, not only if in correct slot
       this.moveWhiteCornerFromBottom(corner);
+    } else if (!this.isWhiteCornerOriented(corner)) {
+      this.orientBottomWhiteCorner(corner);
     }
   }
 
@@ -77,15 +75,47 @@ export class Solver extends Cube {
     } else return null;
   }
 
+  private isInTopLayer(corner: Corner) {
+    return topCornerSlots.some(
+      (position) => JSON.stringify(position) === JSON.stringify(corner)
+    );
+  }
+
   private isCornerInCorrectSlot(corner: Corner) {
     const slot = this.getCorrectSlot(corner);
     return JSON.stringify(corner) === JSON.stringify(slot);
   }
 
-  private isInTopLayer(corner: Corner) {
-    return topCornerSlots.some(
-      (position) => JSON.stringify(position) === JSON.stringify(corner)
-    );
+  private isWhiteCornerOriented(corner: Corner) {
+    if (!this.isCornerInCorrectSlot(corner)) return false;
+    const cube = this.getCubeState();
+
+    // white at the bottom = corner correctly oriented
+    if (cube[corner[2]] === "W") return true;
+
+    return false;
+  }
+
+  private orientBottomWhiteCorner(corner: Corner) {
+    const cube = this.getCubeState();
+    // that's a hell lot of algorithms
+    if (corner[0] === 0 && cube[0] === "W") {
+      this.solverApplyMoves("L", "U", "L'", "U'", "L", "U", "L'");
+    } else if (corner[0] === 3 && cube[3] === "W") {
+      this.solverApplyMoves("F", "U'", "F'", "U", "F", "U'", "F'");
+    } else if (corner[0] === 5 && cube[5] === "W") {
+      this.solverApplyMoves("B", "U", "B'", "U'", "B", "U", "B'");
+    } else if (corner[0] === 14 && cube[14] === "W") {
+      this.solverApplyMoves("R", "U'", "R'", "U", "R", "U'", "R'");
+    } else if (corner[1] === 4 && cube[4] === "W") {
+      this.solverApplyMoves("B'", "U'", "B", "U2", "L", "U'", "L'");
+    } else if (corner[1] === 15 && cube[15] === "W") {
+      this.solverApplyMoves("F", "U", "F'", "U'", "F", "U", "F'");
+    } else if (corner[1] === 17 && cube[17] === "W") {
+      this.solverApplyMoves("R'", "U'", "R", "U2", "B", "U'", "B'");
+    } else if (corner[1] === 18 && cube[18] === "W") {
+      this.solverApplyMoves("R", "U", "R'", "U'", "R", "U", "R'");
+    }
   }
 
   private areWhiteCornersCorrectlyPlaced() {

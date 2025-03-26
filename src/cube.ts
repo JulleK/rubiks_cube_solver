@@ -186,7 +186,7 @@ export class Cube {
     return [...this.cubeState];
   }
 
-  protected setCubeState(cubeState: Cube2by2) {
+  public setCubeState(cubeState: Cube2by2) {
     this.cubeState = cubeState;
     this.mapCorners();
   }
