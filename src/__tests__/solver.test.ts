@@ -1,3 +1,4 @@
+import { log, error } from "console";
 import { Cube } from "../cube";
 import { Solver } from "../solver";
 
@@ -21,12 +22,11 @@ describe("Solver", () => {
     const solver = new Solver(cube);
     solver.solve();
 
-    // why can't I see the logs in the console??
-    if (!isCubeSolved) {
-      console.error("❌ Test failed! Scrambled Cube State:");
-      console.error(cube.visualizeCube());
-      console.error("🛑 Final (incorrect) Cube State:");
-      console.error(solver.visualizeCube());
+    if (!isCubeSolved(solver)) {
+      error("❌ Test failed! Scrambled Cube State:");
+      error(cube.getCubeState());
+      error("Final (incorrect) Cube State:");
+      error(solver.visualizeCube());
     }
 
     expect(isCubeSolved(solver)).toBe(true);

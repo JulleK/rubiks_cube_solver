@@ -5,12 +5,9 @@ export default {
   transform: {
     "^.+\\.tsx?$": ["ts-jest", {}],
   },
-  // chat coocken
   testMatch: ["**/__tests__/**/*.test.ts", "**/*.test.ts"],
   extensionsToTreatAsEsm: [".ts"],
   moduleNameMapper: {
     "^(\\.{1,2}/.*)\\.js$": "$1", // Allow Jest to import without .js
   },
-  silent: false,
-  verbose: true,
 };
