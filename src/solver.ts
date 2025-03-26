@@ -11,7 +11,10 @@ export class Solver extends Cube {
   private moveHistory: Move[];
   constructor(cube?: Cube | Cube2by2) {
     if (cube) super(cube);
-    else super();
+    else {
+      super();
+      this.scramble();
+    }
     this.moveHistory = [];
   }
 
