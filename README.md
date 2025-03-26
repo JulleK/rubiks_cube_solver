@@ -39,11 +39,20 @@ This project is a **Rubik's Cube Solver** written entirely in TypeScript. Using 
 
 ## 🔬 How It Works
 
-Describe the solving algorithm here. Explain:
-- How the cube state is represented.
-- What method is used to solve the cube.
-- Any optimizations applied.
-- TODO!!!
+- The cube state is stored in the `Cube` class. It is a 1D `array` of 24 colors representing each of the cube's stickers.
+- To move the cube's sides, a `turn()` method is defined on the `Cube` class. It moves the stickers in the array, based on which side is turned.
+- The `Solver` class takes in a `Cube` or a cube state as an argument, or generates a new one if none is given.
+- The solving algorithm does these steps:
+  - find the white corners positions
+  - try to insert the white corner into it's correct slot
+    - if white corner at the top apply the according algorithm
+    - if white corner at the bottom in the wrong slot, move it to the top
+    - if white corner in correct slot, but incorrectly rotated, rotate it so that white faces bottom
+  - after the bottom layer is done, move to the top layer
+    - if exactly one yellow corner is in the correct spot, apply an algorithm to swap the remaining 3 yellow corners
+    - if either none or more than one yellow corners are in correct spot, move the top layer (U turn)
+    - if all corners are in their correct slots, we are done
+  - when the yellow corners are in the correct positions, we need to rotate them and we are done!
 
 ## ⬇️ Installation
 
@@ -53,7 +62,7 @@ cd rubiks-cube-solver
 npm install
 ```
 
-Compile the Typescript files into JavaScript (important!):
+Compile the TypeScript files into JavaScript (Important!):
 
 ```sh
 tsc
