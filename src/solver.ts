@@ -6,6 +6,25 @@ import {
   correctCornerSlots,
 } from "./utils/corners.js";
 import type { Corner, Cube2by2, Move } from "./typings/cube_types.js";
+import {
+  diagonalYellowCornersSwap,
+  moveWhiteBackLeftCornerFromBottom,
+  moveWhiteBackRightCornerFromBottom,
+  moveWhiteFrontLeftCornerFromBottom,
+  moveWhiteFrontRightCornerFromBottom,
+  orientBottomWhiteCornerCase1,
+  orientBottomWhiteCornerCase2,
+  orientBottomWhiteCornerCase3,
+  orientBottomWhiteCornerCase4,
+  orientBottomWhiteCornerCase5,
+  orientBottomWhiteCornerCase6,
+  orientBottomWhiteCornerCase7,
+  orientBottomWhiteCornerCase8,
+  orientTopRightWhiteCornerLongCase,
+  orientTopRightWhiteCornerNormalCase,
+  orientTopRightWhiteCornerReverseCase,
+  threeYellowCornersSwap,
+} from "./algorithms.js";
 
 export class Solver extends Cube {
   private moveHistory: Move[];
@@ -21,6 +40,7 @@ export class Solver extends Cube {
   public solve() {
     this.solveFirstLayer();
     this.solveSecondLayer();
+    this.solveLastLayer();
   }
 
   // ---- SOLVING BOTTOM LAYER ----
@@ -62,7 +82,7 @@ export class Solver extends Cube {
     }
   }
 
-  // Finds the correct bottom slot for a corner
+  // Finds the correct bottom slot for a corner based on it's indices
   private getCorrectSlot(corner: Corner) {
     const cube = this.getCubeState();
     const [i1, i2, i3] = corner; // destructure corner indices
@@ -100,24 +120,26 @@ export class Solver extends Cube {
 
   private orientBottomWhiteCorner(corner: Corner) {
     const cube = this.getCubeState();
+    let moves: Move[] | null = null;
     // that's a hell lot of algorithms
     if (corner[0] === 0 && cube[0] === "W") {
-      this.solverApplyMoves("L", "U", "L'", "U'", "L", "U", "L'");
+      moves = orientBottomWhiteCornerCase1;
     } else if (corner[0] === 3 && cube[3] === "W") {
-      this.solverApplyMoves("F", "U'", "F'", "U", "F", "U'", "F'");
+      moves = orientBottomWhiteCornerCase2;
     } else if (corner[0] === 5 && cube[5] === "W") {
-      this.solverApplyMoves("B", "U", "B'", "U'", "B", "U", "B'");
+      moves = orientBottomWhiteCornerCase3;
     } else if (corner[0] === 14 && cube[14] === "W") {
-      this.solverApplyMoves("R", "U'", "R'", "U", "R", "U'", "R'");
+      moves = orientBottomWhiteCornerCase4;
     } else if (corner[1] === 4 && cube[4] === "W") {
-      this.solverApplyMoves("B'", "U'", "B", "U2", "L", "U'", "L'");
+      moves = orientBottomWhiteCornerCase5;
     } else if (corner[1] === 15 && cube[15] === "W") {
-      this.solverApplyMoves("F", "U", "F'", "U'", "F", "U", "F'");
+      moves = orientBottomWhiteCornerCase6;
     } else if (corner[1] === 17 && cube[17] === "W") {
-      this.solverApplyMoves("R'", "U'", "R", "U2", "B", "U'", "B'");
+      moves = orientBottomWhiteCornerCase7;
     } else if (corner[1] === 18 && cube[18] === "W") {
-      this.solverApplyMoves("R", "U", "R'", "U'", "R", "U", "R'");
+      moves = orientBottomWhiteCornerCase8;
     }
+    if (moves) this.solverApplyMoves(moves);
   }
 
   private areWhiteCornersCorrectlyPlaced() {
@@ -195,36 +217,34 @@ export class Solver extends Cube {
   // white facing up, do F'U2FU2RU'R'
   private orientTopRightWhiteCorner() {
     const cube = this.getCubeState();
-    const moves: Move[] = [];
+    let moves: Move[] | null = null;
     if (cube[topRightCorner[0]] === "W") {
-      moves.push("F'", "U2", "F", "U2", "R", "U'", "R'");
+      moves = orientTopRightWhiteCornerLongCase;
     } else if (cube[topRightCorner[1]] === "W") {
-      moves.push("U", "R", "U'", "R'");
+      moves = orientTopRightWhiteCornerReverseCase;
     } else if (cube[topRightCorner[2]] === "W") {
-      moves.push("R", "U", "R'");
+      moves = orientTopRightWhiteCornerNormalCase;
     }
-
-    this.solverApplyMoves(...moves);
+    if (moves) this.solverApplyMoves(moves);
   }
 
   private moveWhiteCornerFromBottom(corner: Corner) {
-    const moves: Move[] = [];
+    let moves: Move[] | null = null;
     switch (corner[0]) {
       case 0:
-        moves.push("B'", "U'", "B");
+        moves = moveWhiteBackLeftCornerFromBottom;
         break;
       case 3:
-        moves.push("F", "U'", "F'");
+        moves = moveWhiteFrontLeftCornerFromBottom;
         break;
       case 5:
-        moves.push("B", "U", "B'");
+        moves = moveWhiteBackRightCornerFromBottom;
         break;
       case 14:
-        moves.push("F'", "U'", "F");
+        moves = moveWhiteFrontRightCornerFromBottom;
         break;
     }
-
-    this.solverApplyMoves(...moves);
+    if (moves) this.solverApplyMoves(moves);
   }
 
   // ---- SOLVING TOP LAYER ----
@@ -232,20 +252,17 @@ export class Solver extends Cube {
   private solveSecondLayer() {
     this.mapCorners();
 
-    const count = this.countCorrectlyPlacedYellowCorners();
-    if (count === 4) {
-      // All corners correctly placed, now rotate them
-    } else if (count === 1) {
-      this.swapYellowCorners();
+    let count = this.countCorrectlyPlacedYellowCorners();
+    while (count !== 4) {
+      if (count === 1) {
+        this.swap3YellowCorners();
+      } else if (count === 2) {
+        this.swapDiagonalYellowCorners();
+      } else {
+        this.solverApplyMoves("U");
+      }
+      count = this.countCorrectlyPlacedYellowCorners();
     }
-    // TODO
-    // find the one correct corner
-    // if none or more than one correct:
-    //   do "U" move
-    // if exactly all correct:
-    //   do the algorithm from LBL
-    // if all correct:
-    //   done!
   }
 
   private countCorrectlyPlacedYellowCorners() {
@@ -258,21 +275,85 @@ export class Solver extends Cube {
     return count;
   }
 
-  private swapYellowCorners() {
-    // move the one correct corner into position - top left corner [2, 11, 12]
-    this.solverApplyMoves("R", "U'", "L'", "U", "R'", "U'", "L");
-    // check if other corners correctly solved
+  private swap3YellowCorners() {
+    let correctCorner: Corner | null = null;
+    let move: Move | null = null;
 
-    // if not do the algorithm once more
+    // find the one correct corner
+    for (const corner of topCornerSlots) {
+      if (this.isCornerInCorrectSlot(corner)) {
+        correctCorner = corner;
+      }
+    }
+
+    // move the one correct corner top right corner [10, 13, 19]
+    //  in order to always do the same algorithm
+    if (correctCorner) {
+      switch (correctCorner[0]) {
+        case 1:
+          move = "U2";
+          break;
+        case 2:
+          move = "U'";
+          break;
+        case 6:
+          move = "U";
+          break;
+      }
+    }
+
+    // apply the algorithm to swap three yellow corners
+    this.solverApplyMoves(threeYellowCornersSwap);
 
     // when done, move back the top layer into it's previous position
+    if (move === "U'") this.solverApplyMoves("U");
+    else if (move === "U") this.solverApplyMoves("U'");
+    else if (move === "U2") this.solverApplyMoves("U2");
+  }
+
+  private swapDiagonalYellowCorners() {
+    // There should be two correct corners and
+    //  we need to check if they are placed diagonally to each other
+    const correctCorners: Corner[] = [];
+    let move: Move | null = null;
+
+    for (const corner of topCornerSlots) {
+      if (this.isCornerInCorrectSlot(corner)) {
+        correctCorners.push(corner);
+      }
+    }
+    if (correctCorners.length !== 2) return;
+
+    // if front top right corner and
+    //  behind top left corners are in correct slots
+    if (correctCorners[0][0] === 1 && correctCorners[1][0] === 10) {
+      move = "U";
+    } else if (correctCorners[0][0] !== 2 || correctCorners[1][0] !== 6) {
+      // return because corners are adjacent to each other, not diagonal
+      return;
+    }
+
+    this.solverApplyMoves(diagonalYellowCornersSwap);
+
+    if (move === "U") this.solverApplyMoves("U'");
+  }
+
+  // ---- ROTATING YELLOW CORNERS ----
+
+  private solveLastLayer() {
+    // TODO
   }
 
   // ---- UTILITY METHODS ----
 
-  private solverApplyMoves(...moves: Move[]) {
-    this.applyMoves(...moves);
-    this.addMovesToHistory(...moves);
+  private solverApplyMoves(moves: Move[] | Move) {
+    if (typeof moves === "string") {
+      this.applyMoves(moves);
+      this.addMovesToHistory(moves);
+    } else {
+      this.applyMoves(...moves);
+      this.addMovesToHistory(...moves);
+    }
     this.mapCorners();
   }
 
