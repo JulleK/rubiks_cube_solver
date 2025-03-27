@@ -5,13 +5,7 @@ import { Solver } from "../solver";
 function isCubeSolved(cube: Cube): boolean {
   const cubeState = cube.getCubeState();
   const correctCubeState = new Cube().getCubeState();
-  return (
-    cubeState[20] === "W" &&
-    cubeState[21] === "W" &&
-    cubeState[22] === "W" &&
-    cubeState[23] === "W"
-  );
-  //   return JSON.stringify(cubeState) === JSON.stringify(correctCubeState);
+  return JSON.stringify(cubeState) === JSON.stringify(correctCubeState);
 }
 
 describe("Solver", () => {

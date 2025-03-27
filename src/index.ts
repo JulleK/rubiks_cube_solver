@@ -4,11 +4,9 @@ import { Solver } from "./solver.js";
 import { Cube } from "./cube.js";
 import { displayMoveAsAscii } from "./utils/move_ascii.js";
 import { sleep } from "./utils/sleep.js";
-import { scrambles } from "./utils/testScrambles.js";
 
 const cube = new Cube();
 cube.scramble();
-// cube.setCubeState(scrambles[0]);
 
 solveAndVisualize(cube);
 
@@ -17,18 +15,17 @@ async function solveAndVisualize(cube: Cube) {
   solver.solve();
 
   const moves = solver.getMoveHistory();
-  // console.clear();
+  console.clear();
 
-  // log(cube.visualizeCube());
+  log(cube.visualizeCube());
   for (const move of moves) {
-    // await sleep(50);
-    // console.clear();
+    await sleep(300);
+    console.clear();
     cube.applyMoves(move);
 
-    // log(cube.visualizeCube());
-    // displayMoveAsAscii(move);
+    log(cube.visualizeCube());
+    displayMoveAsAscii(move);
   }
-  // cube.applyMoves("L", "R'");
   log(cube.visualizeCube());
 }
 

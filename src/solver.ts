@@ -21,11 +21,13 @@ import {
   orientBottomWhiteCornerCase6,
   orientBottomWhiteCornerCase7,
   orientBottomWhiteCornerCase8,
+  orientTopRightNormal,
+  orientTopRightReversed,
   orientTopRightWhiteCornerLongCase,
   orientTopRightWhiteCornerNormalCase,
   orientTopRightWhiteCornerReverseCase,
   threeYellowCornersSwap,
-} from "./algorithms.js";
+} from "./utils/algorithms.js";
 
 export class Solver extends Cube {
   private moveHistory: Move[];
@@ -41,7 +43,7 @@ export class Solver extends Cube {
   public solve() {
     this.solveFirstLayer();
     this.solveSecondLayer();
-    // this.solveLastLayer();
+    this.solveLastLayer();
   }
 
   // ---- SOLVING BOTTOM LAYER ----
@@ -79,7 +81,7 @@ export class Solver extends Cube {
     } else if (!this.isCornerInCorrectSlot(corner)) {
       this.moveWhiteCornerFromBottom(corner);
     } else if (!this.isWhiteCornerOriented(corner)) {
-      this.orientBottomCorner(corner);
+      this.orientBottomWhiteCorner(corner);
     }
   }
 
@@ -119,25 +121,25 @@ export class Solver extends Cube {
     return false;
   }
 
-  private orientBottomCorner(corner: Corner, color: Color = "W") {
+  private orientBottomWhiteCorner(corner: Corner) {
     const cube = this.getCubeState();
     let moves: Move[] | null = null;
     // that's a hell lot of algorithms
-    if (corner[0] === 0 && cube[0] === color) {
+    if (corner[0] === 0 && cube[0] === "W") {
       moves = orientBottomWhiteCornerCase1;
-    } else if (corner[0] === 3 && cube[3] === color) {
+    } else if (corner[0] === 3 && cube[3] === "W") {
       moves = orientBottomWhiteCornerCase2;
-    } else if (corner[0] === 5 && cube[5] === color) {
+    } else if (corner[0] === 5 && cube[5] === "W") {
       moves = orientBottomWhiteCornerCase3;
-    } else if (corner[0] === 14 && cube[14] === color) {
+    } else if (corner[0] === 14 && cube[14] === "W") {
       moves = orientBottomWhiteCornerCase4;
-    } else if (corner[1] === 4 && cube[4] === color) {
+    } else if (corner[1] === 4 && cube[4] === "W") {
       moves = orientBottomWhiteCornerCase5;
-    } else if (corner[1] === 15 && cube[15] === color) {
+    } else if (corner[1] === 15 && cube[15] === "W") {
       moves = orientBottomWhiteCornerCase6;
-    } else if (corner[1] === 17 && cube[17] === color) {
+    } else if (corner[1] === 17 && cube[17] === "W") {
       moves = orientBottomWhiteCornerCase7;
-    } else if (corner[1] === 18 && cube[18] === color) {
+    } else if (corner[1] === 18 && cube[18] === "W") {
       moves = orientBottomWhiteCornerCase8;
     }
     if (moves) this.solverApplyMoves(moves);
@@ -342,13 +344,27 @@ export class Solver extends Cube {
 
   private solveLastLayer() {
     this.solverApplyMoves(["R2", "L2"]);
-    while (!this.isCubeSolved(this.getCubeState())) {
-      for (const corner of bottomCornerSlots) {
-        this.orientBottomCorner(corner);
-      }
+    for (let i = 0; i < 4; i++) {
+      this.orientTopRightYellowCorner();
+      this.solverApplyMoves("D");
     }
 
     this.solverApplyMoves(["R2", "L2"]);
+
+    if (!this.isCubeSolved(this.getCubeState())) {
+      console.log("KURWA NO JAK... 😂🤣🤗😫😭😭😭😭😭");
+    }
+  }
+
+  private orientTopRightYellowCorner() {
+    const cube = this.getCubeState();
+    let moves: Move[] | null = null;
+    if (cube[14] === "Y") {
+      moves = orientTopRightReversed;
+    } else if (cube[18] === "Y") {
+      moves = orientTopRightNormal;
+    }
+    if (moves) this.solverApplyMoves(moves);
   }
 
   // ---- UTILITY METHODS ----

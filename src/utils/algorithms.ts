@@ -1,4 +1,4 @@
-import { Move } from "./typings/cube_types";
+import { Move } from "../typings/cube_types";
 
 export const orientBottomWhiteCornerCase1: Move[] = [
   "L",
@@ -8,6 +8,7 @@ export const orientBottomWhiteCornerCase1: Move[] = [
   "L",
   "U",
   "L'",
+  "U'",
 ];
 export const orientBottomWhiteCornerCase2: Move[] = [
   "F",
@@ -17,6 +18,7 @@ export const orientBottomWhiteCornerCase2: Move[] = [
   "F",
   "U'",
   "F'",
+  "U",
 ];
 export const orientBottomWhiteCornerCase3: Move[] = [
   "B",
@@ -26,6 +28,7 @@ export const orientBottomWhiteCornerCase3: Move[] = [
   "B",
   "U",
   "B'",
+  "U'",
 ];
 export const orientBottomWhiteCornerCase4: Move[] = [
   "R",
@@ -35,6 +38,7 @@ export const orientBottomWhiteCornerCase4: Move[] = [
   "R",
   "U'",
   "R'",
+  "U",
 ];
 export const orientBottomWhiteCornerCase5: Move[] = [
   "B'",
@@ -44,6 +48,7 @@ export const orientBottomWhiteCornerCase5: Move[] = [
   "L",
   "U'",
   "L'",
+  "U",
 ];
 export const orientBottomWhiteCornerCase6: Move[] = [
   "F",
@@ -53,6 +58,7 @@ export const orientBottomWhiteCornerCase6: Move[] = [
   "F",
   "U",
   "F'",
+  "U'",
 ];
 export const orientBottomWhiteCornerCase7: Move[] = [
   "R'",
@@ -71,6 +77,7 @@ export const orientBottomWhiteCornerCase8: Move[] = [
   "R",
   "U",
   "R'",
+  "U'",
 ];
 
 export const orientTopRightWhiteCornerNormalCase: Move[] = ["R", "U", "R'"];
@@ -88,6 +95,7 @@ export const orientTopRightWhiteCornerLongCase: Move[] = [
   "R",
   "U'",
   "R'",
+  "U",
 ];
 
 export const moveWhiteBackLeftCornerFromBottom: Move[] = ["B'", "U'", "B"];
@@ -124,4 +132,26 @@ export const diagonalYellowCornersSwap: Move[] = [
   "F",
   "R",
   "F'",
+];
+
+export const orientTopRightNormal: Move[] = [
+  "R",
+  "U",
+  "R'",
+  "U'",
+  "R",
+  "U",
+  "R'",
+  "U'",
+];
+
+export const orientTopRightReversed: Move[] = [
+  "U",
+  "R",
+  "U'",
+  "R'",
+  "U",
+  "R",
+  "U'",
+  "R'",
 ];
