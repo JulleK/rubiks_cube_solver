@@ -42,4 +42,11 @@ export const topCornerSlots: Array<Corner> = [
   [10, 13, 19],
 ];
 
+export const bottomCornerSlots: Array<Corner> = [
+  [0, 4, 21],
+  [3, 15, 22],
+  [5, 17, 20],
+  [14, 18, 23],
+];
+
 export const topRightCorner = [10, 13, 19];

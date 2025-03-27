@@ -28,7 +28,7 @@ async function solveAndVisualize(cube: Cube) {
     // log(cube.visualizeCube());
     // displayMoveAsAscii(move);
   }
-  cube.applyMoves("L", "R'");
+  // cube.applyMoves("L", "R'");
   log(cube.visualizeCube());
 }
 

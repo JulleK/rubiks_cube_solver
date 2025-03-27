@@ -2,8 +2,9 @@ import { Cube } from "./cube.js";
 import {
   cornerMappings,
   topRightCorner,
-  topCornerSlots,
+  bottomCornerSlots,
   correctCornerSlots,
+  topCornerSlots,
 } from "./utils/corners.js";
 import type { Color, Corner, Cube2by2, Move } from "./typings/cube_types.js";
 import {
@@ -40,7 +41,7 @@ export class Solver extends Cube {
   public solve() {
     this.solveFirstLayer();
     this.solveSecondLayer();
-    this.solveLastLayer();
+    // this.solveLastLayer();
   }
 
   // ---- SOLVING BOTTOM LAYER ----
@@ -78,7 +79,7 @@ export class Solver extends Cube {
     } else if (!this.isCornerInCorrectSlot(corner)) {
       this.moveWhiteCornerFromBottom(corner);
     } else if (!this.isWhiteCornerOriented(corner)) {
-      this.orientBottomWhiteCorner(corner);
+      this.orientBottomCorner(corner);
     }
   }
 
@@ -118,7 +119,7 @@ export class Solver extends Cube {
     return false;
   }
 
-  private orientBottomWhiteCorner(corner: Corner, color: Color = "W") {
+  private orientBottomCorner(corner: Corner, color: Color = "W") {
     const cube = this.getCubeState();
     let moves: Move[] | null = null;
     // that's a hell lot of algorithms
@@ -340,8 +341,14 @@ export class Solver extends Cube {
   // ---- ROTATING YELLOW CORNERS ----
 
   private solveLastLayer() {
-    // this.solverApplyMoves(["R2", "L2"]);
-    // TODO
+    this.solverApplyMoves(["R2", "L2"]);
+    while (!this.isCubeSolved(this.getCubeState())) {
+      for (const corner of bottomCornerSlots) {
+        this.orientBottomCorner(corner);
+      }
+    }
+
+    this.solverApplyMoves(["R2", "L2"]);
   }
 
   // ---- UTILITY METHODS ----
