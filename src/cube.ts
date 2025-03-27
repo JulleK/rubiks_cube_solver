@@ -170,7 +170,7 @@ export class Cube {
   }
 
   private colorizeCube() {
-    const cube: string[] = [...this.cubeState];
+    const cube: string[] = this.getCubeState();
     for (let i = 0; i < cube.length; i++) {
       cube[i] = this.colorizeSticker(cube[i] as Color);
     }
