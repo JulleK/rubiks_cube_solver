@@ -5,7 +5,7 @@ import {
   topCornerSlots,
   correctCornerSlots,
 } from "./utils/corners.js";
-import type { Corner, Cube2by2, Move } from "./typings/cube_types.js";
+import type { Color, Corner, Cube2by2, Move } from "./typings/cube_types.js";
 import {
   diagonalYellowCornersSwap,
   moveWhiteBackLeftCornerFromBottom,
@@ -118,25 +118,25 @@ export class Solver extends Cube {
     return false;
   }
 
-  private orientBottomWhiteCorner(corner: Corner) {
+  private orientBottomWhiteCorner(corner: Corner, color: Color = "W") {
     const cube = this.getCubeState();
     let moves: Move[] | null = null;
     // that's a hell lot of algorithms
-    if (corner[0] === 0 && cube[0] === "W") {
+    if (corner[0] === 0 && cube[0] === color) {
       moves = orientBottomWhiteCornerCase1;
-    } else if (corner[0] === 3 && cube[3] === "W") {
+    } else if (corner[0] === 3 && cube[3] === color) {
       moves = orientBottomWhiteCornerCase2;
-    } else if (corner[0] === 5 && cube[5] === "W") {
+    } else if (corner[0] === 5 && cube[5] === color) {
       moves = orientBottomWhiteCornerCase3;
-    } else if (corner[0] === 14 && cube[14] === "W") {
+    } else if (corner[0] === 14 && cube[14] === color) {
       moves = orientBottomWhiteCornerCase4;
-    } else if (corner[1] === 4 && cube[4] === "W") {
+    } else if (corner[1] === 4 && cube[4] === color) {
       moves = orientBottomWhiteCornerCase5;
-    } else if (corner[1] === 15 && cube[15] === "W") {
+    } else if (corner[1] === 15 && cube[15] === color) {
       moves = orientBottomWhiteCornerCase6;
-    } else if (corner[1] === 17 && cube[17] === "W") {
+    } else if (corner[1] === 17 && cube[17] === color) {
       moves = orientBottomWhiteCornerCase7;
-    } else if (corner[1] === 18 && cube[18] === "W") {
+    } else if (corner[1] === 18 && cube[18] === color) {
       moves = orientBottomWhiteCornerCase8;
     }
     if (moves) this.solverApplyMoves(moves);
@@ -250,8 +250,6 @@ export class Solver extends Cube {
   // ---- SOLVING TOP LAYER ----
 
   private solveSecondLayer() {
-    this.mapCorners();
-
     let count = this.countCorrectlyPlacedYellowCorners();
     while (count !== 4) {
       if (count === 1) {
@@ -329,18 +327,20 @@ export class Solver extends Cube {
     if (correctCorners[0][0] === 1 && correctCorners[1][0] === 10) {
       move = "U";
     } else if (correctCorners[0][0] !== 2 || correctCorners[1][0] !== 6) {
-      // return because corners are adjacent to each other, not diagonal
+      // corners are adjacent to each other, not diagonal.
+      // Do a U turn to find only one correct corner
+      this.solverApplyMoves("U");
       return;
     }
 
     this.solverApplyMoves(diagonalYellowCornersSwap);
-
     if (move === "U") this.solverApplyMoves("U'");
   }
 
   // ---- ROTATING YELLOW CORNERS ----
 
   private solveLastLayer() {
+    // this.solverApplyMoves(["R2", "L2"]);
     // TODO
   }
 
@@ -354,7 +354,6 @@ export class Solver extends Cube {
       this.applyMoves(...moves);
       this.addMovesToHistory(...moves);
     }
-    this.mapCorners();
   }
 
   private addMovesToHistory(...moves: Move[]) {

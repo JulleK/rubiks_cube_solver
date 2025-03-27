@@ -9,12 +9,10 @@ import type {
 
 import { ColorsANSI, textColors } from "./utils/colors.js";
 import { validMoves, parseMove, isValidMove } from "./utils/validate_move.js";
-import { cornerMappings, Corners } from "./utils/corners.js";
 
 export class Cube {
   private cubeState: Cube2by2;
   private colors: ColorsANSI;
-  private corners: Corners;
 
   constructor(initialCube?: Cube2by2 | Cube) {
     if (initialCube) {
@@ -23,9 +21,6 @@ export class Cube {
       this.cubeState = new Array(24);
       this.createInitialCube();
     }
-
-    this.corners = [];
-    this.mapCorners();
 
     this.colors = textColors;
   }
@@ -59,22 +54,6 @@ export class Cube {
         validMoves[Math.floor(Math.random() * validMoves.length)];
       const randDirection = Math.random() < 0.5 ? 1 : -1;
       this.turn(randMove, randDirection);
-    }
-
-    this.mapCorners();
-  }
-
-  /**
-   * maps the cubeState 1D array, like ['W', 'R', 'Y', ...] <-- sticker colors.
-   * Into an array of corner coordinates, [ [0, 4, 21], [1, 7, 8], ... ].
-   * With the colors corresponding to the index, [ ["W", ...], ["R", ...], ...].
-   */
-  protected mapCorners() {
-    for (let i = 0; i < cornerMappings.length; i++) {
-      this.corners[i] = [];
-      for (let j = 0; j < cornerMappings[i].length; j++) {
-        this.corners[i][j] = this.cubeState[cornerMappings[i][j]];
-      }
     }
   }
 
@@ -119,8 +98,6 @@ export class Cube {
       default:
         throw new Error("unknown side " + side);
     }
-
-    this.mapCorners();
   }
 
   public turn2(side: Side) {
@@ -188,7 +165,14 @@ export class Cube {
 
   public setCubeState(cubeState: Cube2by2) {
     this.cubeState = cubeState;
-    this.mapCorners();
+  }
+
+  public isCubeSolved(cube: Cube | Cube2by2) {
+    let cubeState;
+    if (cube instanceof Cube) cubeState = cube.getCubeState();
+    else cubeState = cube;
+    const correctCubeState = new Cube().getCubeState();
+    return JSON.stringify(cubeState) === JSON.stringify(correctCubeState);
   }
 
   public visualizeCube() {
