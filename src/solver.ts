@@ -2,11 +2,10 @@ import { Cube } from "./cube.js";
 import {
   cornerMappings,
   topRightCorner,
-  bottomCornerSlots,
   correctCornerSlots,
   topCornerSlots,
 } from "./utils/corners.js";
-import type { Color, Corner, Cube2by2, Move } from "./typings/cube_types.js";
+import type { Corner, Cube2by2, Move } from "./typings/cube_types.js";
 import {
   diagonalYellowCornersSwap,
   moveWhiteBackLeftCornerFromBottom,
