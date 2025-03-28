@@ -18,6 +18,8 @@ async function solveAndVisualize(cube: Cube) {
   console.clear();
 
   log(cube.visualizeCube());
+  await sleep(3000);
+  
   for (const move of moves) {
     await sleep(300);
     console.clear();
