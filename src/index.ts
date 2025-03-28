@@ -5,4 +5,4 @@ const cube = new Cube();
 cube.scramble();
 
 const cli = new CliCube(cube);
-cli.promptMove();
+cli.promptMove(true);

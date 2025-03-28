@@ -15,7 +15,7 @@ export class CliCube extends Cube {
       output: process.stdout,
     });
   }
-  public promptMove(clear = true) {
+  public promptMove(logHistory = false, clear = true) {
     if (clear) console.clear();
     console.log(this.visualizeCube());
     this.rl.question("Enter your move: ", (userMove) => {
@@ -23,14 +23,10 @@ export class CliCube extends Cube {
         console.log("Goodbye!");
         this.rl.close();
         return;
-      }
-
-      else if (userMove.trim().toLowerCase() === "solve") {
-        solveAndVisualize(this, true);
+      } else if (userMove.trim().toLowerCase() === "solve") {
+        solveAndVisualize(this, logHistory);
         return;
-      }
-
-      else if (userMove.trim().toLowerCase() === "scramble") {
+      } else if (userMove.trim().toLowerCase() === "scramble") {
         this.scramble();
         this.promptMove();
       } else {
@@ -42,9 +38,9 @@ export class CliCube extends Cube {
               this.promptMove();
             }, 1000);
           }
-  
+
           times === 2 ? this.turn2(move) : this.turn(move, direction);
-  
+
           this.promptMove();
         } catch (error) {
           console.log("An error occured!");
